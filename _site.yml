@@ -1,28 +1,40 @@
-name: "YOURNAME"                                # CHANGE HERE 
+name: "Vitiligo"                              # CHANGE HERE 
 output_dir: "."
 navbar:
-  title: "YOURNAME"                             # CHANGE HERE 
+  title: "Vitiligo"                             # CHANGE HERE 
   type: inverse
   left:
     - text: "Home"
       icon: fa-home
       href: index.html
-    - text: "About"
-      icon: fa-user 
-      href: about.html
-    - text: "CV"
-      icon: fa-file-pdf-o
-      href: cv.html
-    - text: "Blog"
-      icon: fa-rss
-      href: https://YOURGITHUB.github.io/blog/  # CHANGE HERE OR DELETE ALL 3 LINES 
+    - text: "SignallingSingleCell"
+      icon: fa-laptop 
+      href: signallingsinglecell.html
+    - text: "DolphinSuite"
+      icon: fa-database
+      href: dolphinnext.html
   right:
-    - text: "Contact me"
+    - text: "Contact"
       icon: fa-envelope-o
-      href: mailto:YOUREMAIL                    # CHANGE HERE 
+      menu:
+      - text: "Garber Lab"
+        href: https://www.umassmed.edu/garberlab/
+      - text: "Harris Lab: Vitiligo Clinic & Research Center"
+        href: https://www.umassmed.edu/vitiligo/about/
+      - text: "UMass Chan Med. Bioinformatics Core"
+        href: https://www.umassmed.edu/biocore/
     - text: "GitHub"
       icon: fa-github
-      href: https://github.com/YOURGITHUB       # CHANGE HERE 
+      menu:
+      - text: "SignallingSingleCell"
+        href: https://github.com/garber-lab/SignallingSingleCell    
+        target: "_blank"
+      - text: "DolphinNext"
+        href: https://github.com/UMMS-Biocore/dolphinnext
+      - text: "DolphinMeta"
+        href: https://github.com/UMMS-Biocore/dmeta 
+      - text: "DolphinPortal"
+        href: https://github.com/UMMS-Biocore/dportal
 output:
   html_document:
     theme: cosmo

@@ -1,5 +1,45 @@
 ---
-title: "Welcome to my website!"
+title: "Network Analysis of Human Vitiligo scRNA-seq"
 ---
 
-You're up and running!
+<style>
+body {
+text-align: justify}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+Vitiligo is an autoimmune skin disease characterized by the targeted destruction of melanocytes by T cells. Cytokine signaling between keratinocytes and T cells results in CD8+ T cell infiltration of vitiligo lesions, but the full scope of signals required to coordinate autoimmune responses is not completely understood ([Gellatly et. al 2021](#reference)).
+
+We performed scRNA-seq on affected and unaffected skin from vitiligo patients, as well as healthy controls, to define the role of each cell type in coordinating autoimmunity during disease progression, and in order to analyze this high dimensional data, we have implemented a novel end-to-end scRNA data analysis package called [SignallingSingleCell](./signallingsinglecell.html). All raw sequencing data was processed by the scRNA-Seq inDrop pipeline developed within the interactive pipeline manager [DolphinNext](./dolphinnext.html).
+
+Using SignallingSingleCell, we confirmed that type 1 cytokine signaling occupied a central role in disease, but we also discovered that this pathway was used by regulatory T cells (Tregs) to restrain disease progression in non-lesional skin. We determined that CCL5-CCR5 signaling served as a chemokine circuit between effector CD8+ T cells and Tregs, and mechanistic studies in a mouse model of vitiligo revealed that CCR5 expression on Tregs was required to suppress disease in vivo but not in vitro. 
+
+##### **Raw Data:** 
+
+The raw .fastq files have been deposited through dbGAP. These files are protected, and you will need an account and to request access to download the files. As of 10/5/21 the data files are processing on the dbGAP server.
+
+https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002455.v1.p1
+
+##### **UMI Tables:** 
+
+For convenience we are providing 3 processed data tables here. One is a raw sparse matrix, that is the output of our processing pipeline with no further manipulation. We are also providing a fully processed UMI table that has been filtered, dimension reduced, clustered, and normalized. The processed UMI table is provided in the <a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf" target="_blank">ExpressionSet</a> class format. We are also providing a separate processed UMI table for the T Cells.
+
+<a href="https://www.dropbox.com/s/y967oe6vwk1jue2/phs002455.v1.p1_UMITable.Rdata?dl=1" target="_blank">Raw UMI Table</a>
+
+<a href="https://www.dropbox.com/s/s49jt231j9gib5u/phs002455_processed_UMItable.Rdata?dl=1" target="_blank">Processed UMI Table</a>
+
+<a href="https://www.dropbox.com/s/clcd7oref1yil5x/phs002455_TCells_processed_UMItable.Rdata?dl=1" target="_blank">Processed UMI Table of T-cells</a>
+
+##### **Interactive Cellxgene Demo:** 
+
+Click <a href="http://vitiligo.dolphinnext.com" target="_blank">Here</a>.
+
+<img width="70%" height="70%" src="./images/networkanalysis.png" class="center">
+
+##### Reference
+
+Gellatly KJ, Strassner JP, Essien K, Refat MA, Murphy RL, Coffin-Schmitt A, Pandya AG, Tovar-Garza A, Frisoli ML, Fan X, Ding X, Kim EE, Abbas Z, McDonel P, Garber M, Harris JE. scRNA-seq of human vitiligo reveals complex networks of subclinical immune activation and a role for CCR5 in Treg function. Sci Transl Med. 2021 Sep 8;13(610):eabd8995. doi: 10.1126/scitranslmed.abd8995. Epub 2021 Sep 8. PMID: 34516831; PMCID: PMC8686160. [<a href="https://www.science.org/doi/10.1126/scitranslmed.abd8995">View</a>]

@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>SignallingSingleCell</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Vitiligo</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="signallingsinglecell.html">
+    <span class="fa fa-laptop"></span>
+     
+    SignallingSingleCell
+  </a>
+</li>
+<li>
+  <a href="dolphinnext.html">
+    <span class="fa fa-database"></span>
+     
+    DolphinSuite
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-envelope-o"></span>
+     
+    Contact
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="https://www.umassmed.edu/garberlab/">Garber Lab</a>
+    </li>
+    <li>
+      <a href="https://www.umassmed.edu/vitiligo/about/">Harris Lab: Vitiligo Clinic &amp; Research Center</a>
+    </li>
+    <li>
+      <a href="https://www.umassmed.edu/biocore/">UMass Chan Med. Bioinformatics Core</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-github"></span>
+     
+    GitHub
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="https://github.com/garber-lab/SignallingSingleCell">SignallingSingleCell</a>
+    </li>
+    <li>
+      <a href="https://github.com/UMMS-Biocore/dolphinnext">DolphinNext</a>
+    </li>
+    <li>
+      <a href="https://github.com/UMMS-Biocore/dmeta">DolphinMeta</a>
+    </li>
+    <li>
+      <a href="https://github.com/UMMS-Biocore/dportal">DolphinPortal</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">SignallingSingleCell</h1>
+
+</div>
+
+
+<p>SignallingSingleCell is an R package that provides an end-to-end approach for the analysis of scRNA-seq data, with a particular focus on building ligand and receptor signaling networks.</p>
+<p><img align="center" src="images/ssc_workflow.png"></p>
+<div id="signallingsinglecell-package" class="section level1">
+<h1>SignallingSingleCell Package</h1>
+<p>The workflow of SignallingSingleCell consists of a few key steps;</p>
+<ul>
+<li>filtering</li>
+<li>gene selection</li>
+<li>dimension reduction</li>
+<li>clustering</li>
+<li>differential expression</li>
+<li>network analysis.</li>
+</ul>
+<p>Additionally, the package has a variety of features that were built in an ad hoc manner. These features include algorithms for the detection of marker genes that are specific to each cell type, aggregation functions used to construct in silico bulk data, and a supervised method of scRNA-seq analysis in order to contextualize the scRNA-seq data with commonly used immunological markers.</p>
+<p>Each of the steps in the analysis workflow will be described in the following vignette by applying the package to the BMDC and human vitiligo scRNA-seq data.</p>
+</div>
+<div id="bdmc-data" class="section level1">
+<h1>BDMC Data</h1>
+<p>We performed scRNA-seq on the bone marrow-derived dendritic cells (BDMCs) in order to determine the cell populations that are present, contextualize these cell populations based on recent studies. We have analyzed the data using the R package, SignallingSingleCell.</p>
+<p>The data used in this vignette is derived from Bone marrow extracted from 6-8 week old female C57 mice, and floating cells were collected on day 8 after derivation with GM-CSF following the protocol in (Donnard et al., 2018). BMDCs were then stimulated with LPS for 0, 1, and 4 hr before performing scRNA-seq using an in house built inDrop system (Klein et al., 2015).</p>
+<div id="package-and-data-loading" class="section level2">
+<h2>Package and Data Loading</h2>
+<pre class="r"><code>library(&quot;SignallingSingleCell&quot;)
+library(kernlab)
+load(url(&quot;https://galaxyweb.umassmed.edu/pub/class/mDC_UMI_Table.Rdata&quot;))
+load(url(&quot;https://galaxyweb.umassmed.edu/pub/class/ex_sc_skin.Rdata&quot;))</code></pre>
+</div>
+<div id="preprocessing" class="section level2">
+<h2>Preprocessing</h2>
+<div id="constructing-the-expressionset-class" class="section level3">
+<h3>Constructing the ExpressionSet Class</h3>
+<p>The ExpressionSet class (ex_sc) is a convenient data structure that contains 3 dataframes. These dataframes contain expression data, cell information, and gene information respectively.</p>
+<p>exprs(ex_sc) is the expression data, where rows are genes and columns are cells. pData(ex_sc) is cell information, where rows are cells and columns are metadata. fData(ex_sc) is gene information, where rows are genes and columns are metadata.</p>
+<pre class="r"><code>ex_sc &lt;- construct_ex_sc(input = mDC_UMI_Table) # mDC_UMI_Table == Digital Gene Expression Matrix
+class(mDC_UMI_Table)</code></pre>
+<pre><code>[1] &quot;matrix&quot; &quot;array&quot; </code></pre>
+<pre class="r"><code>class(ex_sc) </code></pre>
+<pre><code>[1] &quot;ExpressionSet&quot;
+attr(,&quot;package&quot;)
+[1] &quot;Biobase&quot;</code></pre>
+<pre class="r"><code>ex_sc # pData() and fData() are empty</code></pre>
+<pre><code>ExpressionSet (storageMode: lockedEnvironment)
+assayData: 11584 features, 3814 samples 
+  element names: exprs 
+protocolData: none
+phenoData: none
+featureData: none
+experimentData: use &#39;experimentData(object)&#39;
+Annotation:  </code></pre>
+<pre class="r"><code>exprs(ex_sc)[1:5,1:5]</code></pre>
+<pre><code>              0hrA_TGACGGACAAGTAATC 0hrA_CACAACAGTAGCCTCG 0hrA_GTTTGTTTGCACCTCT
+0610007P14Rik                     0                     0                     0
+0610009B22Rik                     0                     0                     0
+0610009O20Rik                     0                     0                     0
+0610010B08Rik                     0                     0                     0
+0610010F05Rik                     0                     0                     0
+              0hrA_GCTTACCTTGACCCTC 0hrA_GGAGAAGCGCTTTGGC
+0610007P14Rik                     0                     0
+0610009B22Rik                     0                     0
+0610009O20Rik                     0                     0
+0610010B08Rik                     0                     0
+0610010F05Rik                     0                     0</code></pre>
+<pre class="r"><code>pData(ex_sc)[1:5,]</code></pre>
+<pre><code>data frame with 0 columns and 5 rows</code></pre>
+<pre class="r"><code>fData(ex_sc)[1:5,]</code></pre>
+<pre><code>data frame with 0 columns and 5 rows</code></pre>
+<pre class="r"><code>rm(mDC_UMI_Table)</code></pre>
+</div>
+<div id="data-annotation" class="section level3">
+<h3>Data Annotation</h3>
+<p>Often we have metadata about the experiment that can be valuable in the analysis! Writing that information now may be appropriate. Our experiment consists of a time course with LPS stimulation. The cell names in the DGE Matrix contain a substring encoding this information.</p>
+<pre class="r"><code>rownames(pData(ex_sc))[c(1,2000,3000)]</code></pre>
+<pre><code>[1] &quot;0hrA_TGACGGACAAGTAATC&quot; &quot;1hrA_TCATGAGGCTTACTCC&quot; &quot;4hrA_CATACATTCCTATTCA&quot;</code></pre>
+<pre class="r"><code>pData(ex_sc)$Timepoint &lt;- NA # initialize a new pData column
+table(pData(ex_sc)$Timepoint)</code></pre>
+<pre><code>&lt; table of extent 0 &gt;</code></pre>
+<pre class="r"><code>pData(ex_sc)[grep(&quot;0hr&quot;, rownames(pData(ex_sc))),&quot;Timepoint&quot;] &lt;- &quot;0hr&quot;
+pData(ex_sc)[grep(&quot;1hr&quot;, rownames(pData(ex_sc))),&quot;Timepoint&quot;] &lt;- &quot;1hr&quot;
+pData(ex_sc)[grep(&quot;4hr&quot;, rownames(pData(ex_sc))),&quot;Timepoint&quot;] &lt;- &quot;4hr&quot;
+head(pData(ex_sc))</code></pre>
+<pre><code>                      Timepoint
+0hrA_TGACGGACAAGTAATC       0hr
+0hrA_CACAACAGTAGCCTCG       0hr
+0hrA_GTTTGTTTGCACCTCT       0hr
+0hrA_GCTTACCTTGACCCTC       0hr
+0hrA_GGAGAAGCGCTTTGGC       0hr
+0hrA_AAATCAGAGATCTCGG       0hr</code></pre>
+<pre class="r"><code>table(ex_sc$Timepoint)</code></pre>
+<pre><code>
+ 0hr  1hr  4hr 
+1729 1004 1081 </code></pre>
+</div>
+<div id="filtering" class="section level3">
+<h3>Filtering</h3>
+<p>Often you will want to filter your data to remove low quality cells. There are many ways to do this, often using the number of captured transcripts, unique genes per cell, or the percent of mitochrondrial genes to remove low quality cells.</p>
+<pre class="r"><code>ex_sc &lt;- calc_libsize(ex_sc, suffix = &quot;raw&quot;) # sums counts for each cell
+ex_sc &lt;- pre_filter(ex_sc, minUMI = 1000, maxUMI = 10000, threshold = 1, minCells = 10,  print_progress = TRUE) # filters cells and genes</code></pre>
+<pre><code>[1] &quot;Filtering Genes&quot;
+[1] &quot;Filtering Low Cells&quot;</code></pre>
+<pre class="r"><code>ex_sc &lt;- calc_libsize(ex_sc, suffix = &quot;raw_filtered&quot;)
+plot_density(ex_sc, title = &quot;UMI Density&quot;,  val = &quot;UMI_sum_raw_filtered&quot;, statistic = &quot;mean&quot;)  </code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>head(pData(ex_sc))</code></pre>
+<pre><code>                      Timepoint UMI_sum_raw UMI_sum_raw_filtered
+0hrA_TGACGGACAAGTAATC       0hr        4572                 4570
+0hrA_CACAACAGTAGCCTCG       0hr        1581                 1580
+0hrA_GTTTGTTTGCACCTCT       0hr        2296                 2288
+0hrA_GCTTACCTTGACCCTC       0hr        2098                 2097
+0hrA_GGAGAAGCGCTTTGGC       0hr        2425                 2421
+0hrA_AAATCAGAGATCTCGG       0hr        6618                 6601</code></pre>
+<pre class="r"><code>plot_density_ridge(ex_sc, title = &quot;UMI Density&quot;,  val = &quot;UMI_sum_raw_filtered&quot;, color_by = &quot;Timepoint&quot;)  </code></pre>
+<pre><code>Picking joint bandwidth of 444</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+</div>
+</div>
+<div id="basic-scrna-seq-analysis" class="section level2">
+<h2>Basic scRNA-seq analysis</h2>
+<div id="dimension-reduction" class="section level3">
+<h3>Dimension reduction</h3>
+<p>Dimensionality reduction is necessary in order to bring the cells from a high dimensional gene expression space (~10k dimensions, one dimension per gene) down to a more reasonable number. Typically this is done first with PCA to bring it down to ~5-15 dimensions, before a final embedding is done using tSNE or UMAP to bring it down to 2 dimensions.</p>
+<pre class="r"><code>?subset_genes
+gene_subset &lt;- subset_genes(ex_sc, method = &quot;PCA&quot;, threshold = 1, minCells = 20, nComp = 10, cutoff = 0.85)
+dim(ex_sc)</code></pre>
+<pre><code>Features  Samples 
+   11055     3812 </code></pre>
+<pre class="r"><code>length(gene_subset)</code></pre>
+<pre><code>[1] 1513</code></pre>
+<pre class="r"><code>ex_sc &lt;- dim_reduce(ex_sc, genelist = gene_subset, pre_reduce = &quot;vPCA&quot;, nVar = .9, nComp = 30, iterations = 500, print_progress=TRUE) </code></pre>
+<pre><code>[1] &quot;Starting vPCA&quot;
+[1] &quot;Starting tSNE&quot;
+Read the 3812 x 6 data matrix successfully!
+Using no_dims = 2, perplexity = 30.000000, and theta = 0.500000
+Computing input similarities...
+Building tree...
+Done in 0.32 seconds (sparsity = 0.030912)!
+Learning embedding...
+Iteration 50: error is 85.845353 (50 iterations in 0.56 seconds)
+Iteration 100: error is 75.307034 (50 iterations in 0.59 seconds)
+Iteration 150: error is 74.450519 (50 iterations in 0.51 seconds)
+Iteration 200: error is 74.241244 (50 iterations in 0.45 seconds)
+Iteration 250: error is 74.171178 (50 iterations in 0.45 seconds)
+Iteration 300: error is 2.164292 (50 iterations in 0.41 seconds)
+Iteration 350: error is 1.796806 (50 iterations in 0.39 seconds)
+Iteration 400: error is 1.621976 (50 iterations in 0.41 seconds)
+Iteration 450: error is 1.521631 (50 iterations in 0.41 seconds)
+Iteration 500: error is 1.460825 (50 iterations in 0.41 seconds)
+Fitting performed in 4.59 seconds.</code></pre>
+<pre class="r"><code>plot_tsne_metadata(ex_sc, color_by = &quot;Timepoint&quot;) </code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>ex_sc &lt;- dim_reduce(ex_sc, genelist = gene_subset, pre_reduce = &quot;iPCA&quot;, nComp = 12, tSNE_perp = 30, iterations = 500, print_progress=FALSE) 
+plot_tsne_metadata(ex_sc, color_by = &quot;Timepoint&quot;) </code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<pre class="r"><code>plot_tsne_metadata(ex_sc, color_by = &quot;iPC_Comp1&quot;, title = &quot;PC1 cell loadings&quot;) </code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
+<pre class="r"><code>plot_tsne_metadata(ex_sc, color_by = &quot;iPC_Comp2&quot;, title = &quot;PC2 cell loadings&quot;) </code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-4.png" width="672" /></p>
+<pre class="r"><code>plot_tsne_metadata(ex_sc, color_by = &quot;iPC_Comp3&quot;, title = &quot;PC3 cell loadings&quot;) </code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-5.png" width="672" /></p>
+</div>
+<div id="clustering" class="section level3">
+<h3>Clustering</h3>
+<p>Now that we have dimension reduced data we can try clustering it! For dimensions, both Comp and 2d are supported. There will determine if the clustering is done on principal components, or on the 2D representation. There are also 2 clustering algorithms available, density and spectral. Typically we recommend spectral clustering on PCA components, or density clustering on the 2d representation. Try both!</p>
+<pre class="r"><code>ex_sc &lt;- cluster_sc(ex_sc, dimension = &quot;Comp&quot;, method = &quot;spectral&quot;, num_clust = 4) 
+ex_sc$cluster_spectral &lt;- ex_sc$Cluster
+ex_sc &lt;- cluster_sc(ex_sc, dimension = &quot;2d&quot;, method = &quot;density&quot;, num_clust = 4) </code></pre>
+<pre><code>Distance cutoff calculated to 0.05082406 </code></pre>
+<pre class="r"><code>ex_sc$cluster_density &lt;- ex_sc$Cluster
+plot_tsne_metadata(ex_sc, color_by = &quot;cluster_spectral&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>plot_tsne_metadata(ex_sc, color_by = &quot;cluster_density&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+</div>
+<div id="cell-type-identification" class="section level3">
+<h3>Cell Type identification</h3>
+<p>There are many possible ways to identify cell types based on their gene expression. The id_markers function will identify genes that are highly expressed in a high proportion of a given cluster, relative to the other clusters.</p>
+<pre class="r"><code>ex_sc &lt;- id_markers(ex_sc, print_progress = TRUE) </code></pre>
+<pre><code>[1] &quot;Finding markers based on fraction expressing&quot;
+[1] &quot;Finding markers based on mean expressing&quot;
+[1] &quot;Merging Lists&quot;</code></pre>
+<pre class="r"><code>ex_sc &lt;- calc_agg_bulk(ex_sc, aggregate_by = &quot;Cluster&quot;)
+markers &lt;- return_markers(ex_sc, num_markers = 15) 
+plot_heatmap(ex_sc, genes = unique(unlist(markers)), type = &quot;bulk&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="normalization" class="section level3">
+<h3>Normalization</h3>
+<p>Now that the data has preliminary clusters, we can normalize. SCRAN normalization will first normalize internally in clusters, before normalizing across clusters. Once the data is normalized we can run the same steps as above before visualization. The first step is to select the genes to be used for normalization. One method would be to first only use genes expressed in more than n cells, and then remove the most variable genes. This method can be computationally expensive, and is currently commented out. A simpler approach, counts per million, is also provided below.</p>
+<pre class="r"><code>table(pData(ex_sc)$Cluster)</code></pre>
+<pre><code>
+Cluster1 Cluster2 Cluster3 Cluster4 
+     962      736      362     1752 </code></pre>
+<pre class="r"><code># ex_sc_norm &lt;- norm_sc(ex_sc, pool_sizes = c(20,25,30,35,40))
+x &lt;- exprs(ex_sc)
+cSum &lt;- apply(x,2,sum) # sum counts for each cell
+x &lt;- as.matrix(sweep(x,2,cSum,FUN=&#39;/&#39;))*1e4 # normalize to UMIs per 10k
+ex_sc_norm &lt;- construct_ex_sc(x) # Make a new expression set with normalized counts
+pData(ex_sc_norm) &lt;- pData(ex_sc) # Copy over the pData
+ex_sc_norm &lt;- calc_libsize(ex_sc_norm, suffix = &quot;CP10k&quot;)
+plot_tsne_metadata(ex_sc_norm, color_by = &quot;UMI_sum_raw&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>plot_tsne_metadata(ex_sc_norm, color_by = &quot;UMI_sum_CP10k&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+</div>
+</div>
+<div id="advanced-scrna-seq-analysis" class="section level2">
+<h2>Advanced scRNA-seq analysis</h2>
+<div id="supervised-analysis" class="section level3">
+<h3>Supervised Analysis</h3>
+<p>From the above analysis, it is clear that some clusters are formed based on their cell type, while others are based on their experimental condition. In these cases it can be useful to incorporate prior information in order to obtain clusters and annotations that are grounded in biological significance. Below, we can assign “panels” similar to flow cytometry, that will enable cell groupings based on the expression of genes that you believe to signify biologically relevant cell types.</p>
+<pre class="r"><code>panel1 &lt;- c(&quot;S100a9&quot;, &quot;Mmp9&quot;) # Neutrophil Markers
+panel2 &lt;- c(&quot;Ccr7&quot;, &quot;Fscn1&quot;, &quot;Flt3&quot;) # DC
+panel3 &lt;- c(&quot;Mertk&quot;, &quot;Csf1r&quot;) # Mac
+panels &lt;- list(panel1, panel2, panel3)
+plot_tsne_gene(ex_sc_norm, gene = panels[[1]], title = &quot;&quot;, log_scale = T)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>plot_tsne_gene(ex_sc_norm, gene = panels[[2]], title = &quot;&quot;, log_scale = T)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<pre class="r"><code>plot_tsne_gene(ex_sc_norm, gene = panels[[3]], title = &quot;&quot;, log_scale = T)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-3.png" width="672" /></p>
+<pre class="r"><code>names(panels) &lt;- c(&quot;Neutrophil&quot;, &quot;Dendritic&quot;, &quot;Macrophage&quot;)
+panels</code></pre>
+<pre><code>$Neutrophil
+[1] &quot;S100a9&quot; &quot;Mmp9&quot;  
+
+$Dendritic
+[1] &quot;Ccr7&quot;  &quot;Fscn1&quot; &quot;Flt3&quot; 
+
+$Macrophage
+[1] &quot;Mertk&quot; &quot;Csf1r&quot;</code></pre>
+<pre class="r"><code>ex_sc_norm &lt;- flow_filter(ex_sc_norm, panels = panels, title = &quot;Flow Pass Cells&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-4.png" width="672" /></p>
+<pre class="r"><code>ex_sc_norm &lt;- flow_svm(ex_sc_norm, pcnames = &quot;Comp&quot;)</code></pre>
+<pre><code>Loading required package: lattice</code></pre>
+<pre class="r"><code>plot_tsne_metadata(ex_sc_norm, color_by = &quot;cluster_spectral&quot;, facet_by = &quot;Timepoint&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-5.png" width="672" /></p>
+<pre class="r"><code>plot_tsne_metadata(ex_sc_norm, color_by = &quot;SVM_Classify&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-6.png" width="672" /></p>
+</div>
+<div id="de-analysis" class="section level3">
+<h3>DE analysis</h3>
+<p>Now that cells are grouped by their cell type, we can run DE in order to determine which genes are change in association with our experimental conditions.</p>
+<p>For simplicity we can subset to 0hr and 4hr, to find the genes that change between these conditions.</p>
+<p>It should be noted that DE should always be run on raw counts, not on the normalized counts!</p>
+<pre class="r"><code>ex_sc_norm_0_4 &lt;- subset_ex_sc(ex_sc_norm, variable = &quot;Timepoint&quot;, select = c(&quot;0hr&quot;, &quot;4hr&quot;))</code></pre>
+<pre><code>[1] &quot;Subsetted Data is 2808 cells&quot;
+
+ 0hr  4hr 
+1729 1079 </code></pre>
+<pre class="r"><code>table(pData(ex_sc_norm_0_4)[,c(&quot;SVM_Classify&quot;, &quot;Timepoint&quot;)])</code></pre>
+<pre><code>            Timepoint
+SVM_Classify  0hr  4hr
+  Dendritic   115  109
+  Macrophage 1582  921
+  Neutrophil   32   49</code></pre>
+<pre class="r"><code>findDEgenes(input = ex_sc,
+            pd = pData(ex_sc_norm_0_4),
+            DEgroup = &quot;Timepoint&quot;,
+            contrastID = &quot;4hr&quot;,
+            facet_by = &quot;SVM_Classify&quot;,
+            outdir = &quot;~/Downloads/&quot;)</code></pre>
+<pre><code>[1] &quot;Performing DE for Dendritic&quot;</code></pre>
+<pre><code>Calculating norm factors...</code></pre>
+<pre><code>Estimating dispersion...</code></pre>
+<pre><code>Doing likelihood ratio fit...</code></pre>
+<pre><code>[1] &quot;Performing DE for Macrophage&quot;</code></pre>
+<pre><code>Calculating norm factors...</code></pre>
+<pre><code>Estimating dispersion...</code></pre>
+<pre><code>Doing likelihood ratio fit...</code></pre>
+<pre><code>[1] &quot;Performing DE for Neutrophil&quot;</code></pre>
+<pre><code>Calculating norm factors...</code></pre>
+<pre><code>Estimating dispersion...</code></pre>
+<pre><code>Doing likelihood ratio fit...</code></pre>
+<pre class="r"><code># Macrophages
+g &lt;- plot_volcano(de_path = &quot;~/Downloads/&quot;, de_file = &quot;Macrophage_4hr_DEresults.tsv&quot;, fdr_cut = 1E-150, logfc_cut = 1)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>plot(g)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<pre class="r"><code>mac_de &lt;- unique(g$data$label)
+mac_de &lt;- mac_de[-which(mac_de == &quot;&quot;)]
+plot_violin(ex_sc_norm_0_4, color_by = &quot;Timepoint&quot;, facet_by = &quot;SVM_Classify&quot;, gene = &quot;Rsad2&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
+<pre class="r"><code># DCs
+g &lt;- plot_volcano(de_path = &quot;~/Downloads/&quot;, de_file = &quot;Dendritic_4hr_DEresults.tsv&quot;, fdr_cut = 0.0001, logfc_cut = 2)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-4.png" width="672" /></p>
+<pre class="r"><code>plot(g)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-5.png" width="672" /></p>
+<pre class="r"><code>dc_de &lt;- unique(g$data$label)
+dc_de &lt;- dc_de[-which(dc_de == &quot;&quot;)]
+plot_violin(ex_sc_norm_0_4, color_by = &quot;Timepoint&quot;, facet_by = &quot;SVM_Classify&quot;, gene = &quot;Ifit1&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-6.png" width="672" /></p>
+<pre class="r"><code># Neutrophils
+g &lt;- plot_volcano(de_path = &quot;~/Downloads/&quot;, de_file = &quot;Neutrophil_4hr_DEresults.tsv&quot;, fdr_cut = 1E-5, logfc_cut = 3)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-7.png" width="672" /></p>
+<pre class="r"><code>plot(g)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-8.png" width="672" /></p>
+<pre class="r"><code>neut_de &lt;- unique(g$data$label)
+neut_de &lt;- neut_de[-which(neut_de == &quot;&quot;)]
+plot_violin(ex_sc_norm_0_4, color_by = &quot;Timepoint&quot;, facet_by = &quot;SVM_Classify&quot;, gene = &quot;Mmp9&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-9.png" width="672" /></p>
+<pre class="r"><code># Heatmap of these DE genes
+all_de &lt;- c(mac_de, dc_de, neut_de)
+unique(all_de)</code></pre>
+<pre><code>  [1] &quot;Rsad2&quot;         &quot;Cxcl10&quot;        &quot;Ccl4&quot;          &quot;Ifit1&quot;        
+  [5] &quot;Ccl5&quot;          &quot;Cmpk2&quot;         &quot;Il1b&quot;          &quot;Il12b&quot;        
+  [9] &quot;Ccl3&quot;          &quot;Ifit2&quot;         &quot;Irg1&quot;          &quot;Il1a&quot;         
+ [13] &quot;Oasl1&quot;         &quot;Il6&quot;           &quot;Cd69&quot;          &quot;Cxcl2&quot;        
+ [17] &quot;Cxcl3&quot;         &quot;Tnfsf15&quot;       &quot;Tnf&quot;           &quot;Cd40&quot;         
+ [21] &quot;Ccnd2&quot;         &quot;Saa3&quot;          &quot;Ptx3&quot;          &quot;Mx1&quot;          
+ [25] &quot;Socs3&quot;         &quot;Gbp5&quot;          &quot;Slc7a2&quot;        &quot;Ifih1&quot;        
+ [29] &quot;Sdc4&quot;          &quot;Ifit3&quot;         &quot;Clec4e&quot;        &quot;Ifi47&quot;        
+ [33] &quot;Nos2&quot;          &quot;Ch25h&quot;         &quot;Isg15&quot;         &quot;Socs1&quot;        
+ [37] &quot;Ifi205&quot;        &quot;Plek&quot;          &quot;Gm14446&quot;       &quot;Gbp2&quot;         
+ [41] &quot;Iigp1&quot;         &quot;Marcksl1&quot;      &quot;Plet1&quot;         &quot;Tnfaip3&quot;      
+ [45] &quot;AA467197&quot;      &quot;Serpina3g&quot;     &quot;Ptgs2&quot;         &quot;Usp18&quot;        
+ [49] &quot;Clic4&quot;         &quot;Ccl2&quot;          &quot;Pyhin1&quot;        &quot;Trim30a&quot;      
+ [53] &quot;Slfn5&quot;         &quot;Oasl2&quot;         &quot;Slco3a1&quot;       &quot;Inhba&quot;        
+ [57] &quot;Gbp7&quot;          &quot;Mndal&quot;         &quot;Irgm1&quot;         &quot;Irf7&quot;         
+ [61] &quot;Ifi203&quot;        &quot;Mnda&quot;          &quot;Cav1&quot;          &quot;Il1rn&quot;        
+ [65] &quot;Wdr92&quot;         &quot;Cd14&quot;          &quot;Ccrl2&quot;         &quot;Slc7a11&quot;      
+ [69] &quot;Ifi204&quot;        &quot;Nt5c3&quot;         &quot;Parp14&quot;        &quot;Cd274&quot;        
+ [73] &quot;Cfb&quot;           &quot;Gbp3&quot;          &quot;Gm12250&quot;       &quot;Helz2&quot;        
+ [77] &quot;Peli1&quot;         &quot;Acsl1&quot;         &quot;Il15&quot;          &quot;Ddx58&quot;        
+ [81] &quot;Jak2&quot;          &quot;Vcan&quot;          &quot;Fam26f&quot;        &quot;Cflar&quot;        
+ [85] &quot;Gm4951&quot;        &quot;Gadd45b&quot;       &quot;Ms4a4c&quot;        &quot;Sh3bp5&quot;       
+ [89] &quot;Pim1&quot;          &quot;Trim30d&quot;       &quot;Rtp4&quot;          &quot;Gbp4&quot;         
+ [93] &quot;Daxx&quot;          &quot;Pnp&quot;           &quot;Slamf7&quot;        &quot;Igtp&quot;         
+ [97] &quot;Ehd1&quot;          &quot;Tap1&quot;          &quot;Sod2&quot;          &quot;Bcl2a1b&quot;      
+[101] &quot;Bcl2a1a&quot;       &quot;Nfkbia&quot;        &quot;Znfx1&quot;         &quot;Tnfaip2&quot;      
+[105] &quot;Slfn2&quot;         &quot;Csf1r&quot;         &quot;Srgn&quot;          &quot;Ftl1&quot;         
+[109] &quot;Dusp2&quot;         &quot;Fgl2&quot;          &quot;Ccl17&quot;         &quot;Lgals9&quot;       
+[113] &quot;Cxcl9&quot;         &quot;Cited2&quot;        &quot;Parp9&quot;         &quot;Bcl2l11&quot;      
+[117] &quot;Ccl9&quot;          &quot;Dck&quot;           &quot;Sp100&quot;         &quot;Cd86&quot;         
+[121] &quot;Bcl2l1&quot;        &quot;Ebi3&quot;          &quot;Cd70&quot;          &quot;Alcam&quot;        
+[125] &quot;Ndrg2&quot;         &quot;Dhx58&quot;         &quot;Prkx&quot;          &quot;Xaf1&quot;         
+[129] &quot;Snx2&quot;          &quot;Irgm2&quot;         &quot;Nampt&quot;         &quot;Flt3&quot;         
+[133] &quot;Dnajc5&quot;        &quot;Cd53&quot;          &quot;Tcf4&quot;          &quot;Tra2a&quot;        
+[137] &quot;Phf11b&quot;        &quot;Vopp1&quot;         &quot;Pfkp&quot;          &quot;Zbp1&quot;         
+[141] &quot;Parp12&quot;        &quot;Ramp3&quot;         &quot;Lacc1&quot;         &quot;Mylk&quot;         
+[145] &quot;Ehd4&quot;          &quot;Usp25&quot;         &quot;Stat5a&quot;        &quot;AI607873&quot;     
+[149] &quot;Flnb&quot;          &quot;Bbx&quot;           &quot;Herc6&quot;         &quot;Rapgef2&quot;      
+[153] &quot;Tnip3&quot;         &quot;Prkrir&quot;        &quot;Fn1&quot;           &quot;Lcn2&quot;         
+[157] &quot;Pla1a&quot;         &quot;Ranbp2&quot;        &quot;Rfk&quot;           &quot;Cd81&quot;         
+[161] &quot;Pea15a&quot;        &quot;Tor1aip1&quot;      &quot;Retnlg&quot;        &quot;Lipg&quot;         
+[165] &quot;Ccl7&quot;          &quot;H2-M2&quot;         &quot;Slfn4&quot;         &quot;Cycs&quot;         
+[169] &quot;Stat2&quot;         &quot;4632428N05Rik&quot; &quot;Hist1h1c&quot;      &quot;Mmp9&quot;         
+[173] &quot;Tagap&quot;         &quot;Add3&quot;          &quot;Cdc42ep3&quot;      &quot;Cnn2&quot;         
+[177] &quot;Fam101b&quot;       &quot;Cd300lb&quot;       &quot;Mt2&quot;           &quot;Nfkbiz&quot;       
+[181] &quot;Cxcl11&quot;        &quot;Slc2a3&quot;        &quot;Mapkapk2&quot;      &quot;R3hdm4&quot;       
+[185] &quot;Msl1&quot;          &quot;Tor3a&quot;         &quot;Zfp36l2&quot;       &quot;Csf3r&quot;        
+[189] &quot;Capza2&quot;       </code></pre>
+<pre class="r"><code>ex_sc_norm &lt;- calc_agg_bulk(ex_sc_norm, aggregate_by = c(&quot;Timepoint&quot;, &quot;SVM_Classify&quot;))
+plot_heatmap(ex_sc_norm, genes = c(mac_de, dc_de, neut_de), type = &quot;bulk&quot;, facet_by = &quot;SVM_Classify&quot;, gene_names = F)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-10.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="human-vitiligo-data" class="section level1">
+<h1>Human Vitiligo Data</h1>
+<p>We performed scRNA data analysis using SignallingSingleCell on affected and unaffected skin from vitiligo patients, as well as healthy controls, to define the role of each cell type in coordinating autoimmunity during disease progression.</p>
+<div id="data-description" class="section level2">
+<h2>Data Description</h2>
+<p>The data was generated using suction blistering followed by scRNA-seq on 10 subjects with active vitiligo (treatment-naïve for at least 6 months) and 7 healthy individuals. For each vitiligo subject, we collected 2 sets of blisters, one lesional sample from affected skin and one non-lesional sample from unaffected skin, located at least 10cm away from any visible lesion.</p>
+<p>You can find more details in,</p>
+<p><a href="https://www.science.org/doi/10.1126/scitranslmed.abd8995" class="uri">https://www.science.org/doi/10.1126/scitranslmed.abd8995</a></p>
+<p>For convenience we are providing 3 processed data tables here. One is a raw sparse matrix, that is the output of our processing pipeline with no further manipulation. We are also providing a fully processed UMI table that has been filtered, dimension reduced, clustered, and normalized. The processed UMI table is provided in the expression set class format (<a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf" class="uri">https://www.bioconductor.org/packages/devel/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf</a>). We are also providing a separate processed UMI table for the T Cells.</p>
+<p>The raw .fastq files have been deposited through dbGAP.</p>
+<p><a href="https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002455.v1.p1" class="uri">https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002455.v1.p1</a></p>
+<p>These files are protected, and you will need an account and to request access to download the files. As of 10/5/21 the data files are processing on the dbGAP server.</p>
+<div id="download-links" class="section level3">
+<h3>Download Links</h3>
+<pre class="r"><code># devtools::install_github(&quot;garber-lab/SignallingSingleCell&quot;)
+library(SignallingSingleCell)
+library(kernlab)
+# load(url(&quot;https://www.dropbox.com/s/y967oe6vwk1jue2/phs002455.v1.p1_UMITable.Rdata?dl=1&quot;)) # The Raw Data
+load(url(&quot;https://www.dropbox.com/s/s49jt231j9gib5u/phs002455_processed_UMItable.Rdata?dl=1&quot;))
+load(url(&quot;https://www.dropbox.com/s/clcd7oref1yil5x/phs002455_TCells_processed_UMItable.Rdata?dl=1&quot;))</code></pre>
+</div>
+</div>
+<div id="data-exploration" class="section level2">
+<h2>Data Exploration</h2>
+<div id="the-expressionset-class" class="section level3">
+<h3>The ExpressionSet Class</h3>
+<p>The ExpressionSet class (ex_sc) is a convenient data structure that contains 3 dataframes. These dataframes contain expression data, cell information, and gene information respectively.</p>
+<p>exprs(ex_sc) is the expression data, where rows are genes and columns are cells.</p>
+<p>pData(ex_sc) is cell information, where rows are cells and columns are metadata.</p>
+<p>fData(ex_sc) is gene information, where rows are genes and columns are metadata.</p>
+<pre class="r"><code>colnames(pData(phs002455_processed_UMItable))</code></pre>
+<pre><code> [1] &quot;Patient&quot;         &quot;Disease&quot;         &quot;Phenotype&quot;       &quot;Skin&quot;           
+ [5] &quot;UMI_sum_raw&quot;     &quot;x&quot;               &quot;y&quot;               &quot;Cluster&quot;        
+ [9] &quot;UMI_sum_norm&quot;    &quot;CellType&quot;        &quot;Cluster_Fig_1B&quot;  &quot;Cluster_Refined&quot;</code></pre>
+<pre class="r"><code># Columns 1-4 are all phenotypic metadata related to the patient sample
+# Columns 5-12 are all related to cell specific metadata such as tSNE coordinates, Clusters, etc
+colnames(fData(phs002455_processed_UMItable))</code></pre>
+<pre><code> [1] &quot;CD8_marker_score_Cluster_Refined&quot;    
+ [2] &quot;DC_marker_score_Cluster_Refined&quot;     
+ [3] &quot;GD_marker_score_Cluster_Refined&quot;     
+ [4] &quot;KRT-B1_marker_score_Cluster_Refined&quot; 
+ [5] &quot;KRT-B2_marker_score_Cluster_Refined&quot; 
+ [6] &quot;KRT-ECR_marker_score_Cluster_Refined&quot;
+ [7] &quot;KRT-GR_marker_score_Cluster_Refined&quot; 
+ [8] &quot;KRT-SP_marker_score_Cluster_Refined&quot; 
+ [9] &quot;MAC_marker_score_Cluster_Refined&quot;    
+[10] &quot;MEL_marker_score_Cluster_Refined&quot;    
+[11] &quot;NK_marker_score_Cluster_Refined&quot;     
+[12] &quot;TConv_marker_score_Cluster_Refined&quot;  
+[13] &quot;Treg_marker_score_Cluster_Refined&quot;   </code></pre>
+<pre class="r"><code># The only thing stored in fData right now are cluster marker scores.
+# These were calculated with id_markers()</code></pre>
+</div>
+<div id="figure-1b" class="section level3">
+<h3>Figure 1B</h3>
+<p>Reproduce Figure 1B from <a href="https://www.science.org/doi/10.1126/scitranslmed.abd8995" class="uri">https://www.science.org/doi/10.1126/scitranslmed.abd8995</a></p>
+<pre class="r"><code>plot_tsne_metadata(phs002455_processed_UMItable, color_by = &quot;Cluster_Fig_1B&quot;, shuffle = T)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-13-1.png" width="960" /></p>
+<pre class="r"><code>plot_tsne_gene(phs002455_processed_UMItable, gene = c(&quot;TRAC&quot;, &quot;TYR&quot;))</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-13-2.png" width="960" /></p>
+<pre class="r"><code># Additional plots
+plot_violin(phs002455_processed_UMItable, gene = c(&quot;IFNG&quot;), color_by = &quot;Skin&quot;, facet_by = &quot;Cluster_Refined&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-13-3.png" width="960" /></p>
+<pre class="r"><code>markers &lt;- return_markers(phs002455_processed_UMItable, return_by = &quot;Cluster_Refined&quot;, num_markers = 5)
+markers</code></pre>
+<pre><code>$CD8_Markers
+[1] &quot;CD8A&quot; &quot;NKG7&quot; &quot;CCL5&quot; &quot;CD8B&quot; &quot;CD3D&quot;
+
+$DC_Markers
+[1] &quot;CD207&quot;    &quot;CD1A&quot;     &quot;FCER1A&quot;   &quot;HLA-DQB2&quot; &quot;AIF1&quot;    
+
+$GD_Markers
+[1] &quot;TARP&quot;  &quot;TRGC1&quot; &quot;CD8A&quot;  &quot;CCL5&quot;  &quot;TRGC2&quot;
+
+$`KRT-B1_Markers`
+[1] &quot;CYR61&quot;   &quot;COL17A1&quot; &quot;POSTN&quot;   &quot;SYT8&quot;    &quot;RND3&quot;   
+
+$`KRT-B2_Markers`
+[1] &quot;S100A2&quot;   &quot;KRT15&quot;    &quot;CCDC3&quot;    &quot;TP63&quot;     &quot;MIR205HG&quot;
+
+$`KRT-ECR_Markers`
+[1] &quot;KRT6B&quot; &quot;MUCL1&quot; &quot;S100P&quot; &quot;MMP7&quot;  &quot;KRT77&quot;
+
+$`KRT-GR_Markers`
+[1] &quot;KRT2&quot;   &quot;LGALS7&quot; &quot;SBSN&quot;   &quot;KLK11&quot;  &quot;KRTDAP&quot;
+
+$`KRT-SP_Markers`
+[1] &quot;KRTDAP&quot;  &quot;LGALS7&quot;  &quot;LGALS7B&quot; &quot;SBSN&quot;    &quot;DMKN&quot;   
+
+$MAC_Markers
+[1] &quot;CLEC10A&quot; &quot;FPR3&quot;    &quot;LGALS2&quot;  &quot;LYZ&quot;     &quot;CPVL&quot;   
+
+$MEL_Markers
+[1] &quot;APOD&quot; &quot;TYR&quot;  &quot;BCAN&quot; &quot;DCT&quot;  &quot;PLP1&quot;
+
+$NK_Markers
+[1] &quot;SPINK2&quot; &quot;XCL1&quot;   &quot;CTSW&quot;   &quot;KLRB1&quot;  &quot;TRDC&quot;  
+
+$TConv_Markers
+[1] &quot;IL32&quot;  &quot;TRBC2&quot; &quot;CD3D&quot;  &quot;CD6&quot;   &quot;CD48&quot; 
+
+$Treg_Markers
+[1] &quot;CD27&quot;  &quot;CD3D&quot;  &quot;IL32&quot;  &quot;TRBC2&quot; &quot;CTLA4&quot;</code></pre>
+<pre class="r"><code>plot_gene_dots(phs002455_processed_UMItable, genes = unique(unlist(markers)), break_by = &quot;Cluster_Refined&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-13-4.png" width="960" /></p>
+</div>
+<div id="figure-1c" class="section level3">
+<h3>Figure 1C</h3>
+<p>Reproduce Figure 1C from <a href="https://www.science.org/doi/10.1126/scitranslmed.abd8995" class="uri">https://www.science.org/doi/10.1126/scitranslmed.abd8995</a></p>
+<pre class="r"><code>plot_tsne_metadata(phs002455_TCells_processed_UMItable, color_by = &quot;Cluster&quot;, shuffle = T)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-14-1.png" width="960" /></p>
+<pre class="r"><code>plot_tsne_gene(phs002455_TCells_processed_UMItable, gene = c(&quot;TRAC&quot;, &quot;CD4&quot;, &quot;CD8A&quot;, &quot;FOXP3&quot;, &quot;TRGC1&quot;, &quot;FCER1G&quot;))</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-14-2.png" width="960" /></p>
+<pre class="r"><code># To create the aggregate bulk heatmaps first calculate the aggregate bulk values
+phs002455_TCells_processed_UMItable &lt;- calc_agg_bulk(phs002455_TCells_processed_UMItable, aggregate_by = &quot;Cluster&quot;)
+# Then identify markers
+phs002455_TCells_processed_UMItable &lt;- id_markers(phs002455_TCells_processed_UMItable, id_by = &quot;Cluster&quot;, overwrite = T)</code></pre>
+<pre><code>[1] &quot;Finding markers based on fraction expressing&quot;
+[1] &quot;Finding markers based on mean expressing&quot;
+[1] &quot;Merging Lists&quot;</code></pre>
+<pre class="r"><code>markers &lt;- return_markers(phs002455_TCells_processed_UMItable)
+markers</code></pre>
+<pre><code>$CD8_Markers
+ [1] &quot;CD8A&quot;  &quot;GZMH&quot;  &quot;CD8B&quot;  &quot;NKG7&quot;  &quot;GZMK&quot;  &quot;GZMB&quot;  &quot;EOMES&quot; &quot;GZMA&quot;  &quot;CCL4&quot; 
+[10] &quot;CCL5&quot; 
+
+$GD_Markers
+ [1] &quot;TARP&quot;    &quot;TRGC1&quot;   &quot;TRGC2&quot;   &quot;KLRC3&quot;   &quot;CD8A&quot;    &quot;CD8B&quot;    &quot;NKG7&quot;   
+ [8] &quot;FXYD2&quot;   &quot;KIR3DL2&quot; &quot;KLRC2&quot;  
+
+$NK_Markers
+ [1] &quot;SPINK2&quot;    &quot;FCER1G&quot;    &quot;XCL2&quot;      &quot;KLRF2&quot;     &quot;XCL1&quot;      &quot;MB&quot;       
+ [7] &quot;TMPRSS11E&quot; &quot;KRT81&quot;     &quot;SPTSSB&quot;    &quot;TRDC&quot;     
+
+$TConv_Markers
+ [1] &quot;CD40LG&quot;   &quot;CD4&quot;      &quot;CD6&quot;      &quot;CCR6&quot;     &quot;TNFRSF25&quot; &quot;ADAM19&quot;  
+ [7] &quot;IL26&quot;     &quot;CTSH&quot;     &quot;HLF&quot;      &quot;RORA&quot;    
+
+$Treg_Markers
+ [1] &quot;CD4&quot;    &quot;FOXP3&quot;  &quot;CTLA4&quot;  &quot;GBP5&quot;   &quot;TBC1D4&quot; &quot;TIGIT&quot;  &quot;CD27&quot;   &quot;LAIR2&quot; 
+ [9] &quot;IKZF4&quot;  &quot;F5&quot;    </code></pre>
+<pre class="r"><code>markers &lt;- unique(unlist(markers))</code></pre>
+<p>Now create a heatmap using these values</p>
+<pre class="r"><code>plot_heatmap(phs002455_TCells_processed_UMItable, type = &quot;bulk&quot;, genes = markers)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-15-1.png" width="576" /></p>
+</div>
+</div>
+<div id="basic-network-analysis" class="section level2">
+<h2>Basic Network Analysis</h2>
+<div id="annotate-ligands-and-receptors" class="section level3">
+<h3>Annotate Ligands and Receptors</h3>
+<p>These functions are still in development, but we have included them for illustration purposes. The goal is to take aggregate bulk CPM values derived from scRNA-seq, cross reference them to a database of ligand and receptor pairs (Ramilowski, Jordan A et al. “A draft network of ligand-receptor-mediated multicellular signalling in human.” Nature communications vol. 6 7866. 22 Jul. 2015, <a href="doi:10.1038/ncomms8866" class="uri">doi:10.1038/ncomms8866</a>), and then construct a network. The first step is to calculate the aggregate bulk CPM values, followed by annotating the ligands and receptors in the data.</p>
+<pre class="r"><code># This function is calculating our aggregate bulk CPM values. We have some thresholds (25 CPM or the value will be set to 0, and 15 minimum cells expressing within the group or the value set to 0). This is to greatly reduce the complexity of the network, and reduce spurious nodes with little supporting data.
+phs002455_processed_UMItable &lt;- calc_agg_bulk(phs002455_processed_UMItable, aggregate_by = c(&quot;Skin&quot;, &quot;Cluster_Refined&quot;), group_by = &quot;Skin&quot;, cutoff_cpm = 25, cutoff_num = 15)
+# The aggregate bulk data is written into fData()
+colnames(fData(phs002455_processed_UMItable))[14:ncol(fData(phs002455_processed_UMItable))]</code></pre>
+<pre><code> [1] &quot;1-Healthy_CD8_num_genes_11521_num_cells_311_percent_3.28_bulk&quot;         
+ [2] &quot;2-NonLesional_CD8_num_genes_10925_num_cells_197_percent_1.79_bulk&quot;     
+ [3] &quot;3-Disease_CD8_num_genes_13319_num_cells_1444_percent_12.13_bulk&quot;       
+ [4] &quot;1-Healthy_DC_num_genes_12950_num_cells_1860_percent_19.64_bulk&quot;        
+ [5] &quot;2-NonLesional_DC_num_genes_11836_num_cells_753_percent_6.82_bulk&quot;      
+ [6] &quot;3-Disease_DC_num_genes_12558_num_cells_1184_percent_9.95_bulk&quot;         
+ [7] &quot;1-Healthy_GD_num_genes_9552_num_cells_96_percent_1.01_bulk&quot;            
+ [8] &quot;2-NonLesional_GD_num_genes_9891_num_cells_116_percent_1.05_bulk&quot;       
+ [9] &quot;3-Disease_GD_num_genes_12381_num_cells_564_percent_4.74_bulk&quot;          
+[10] &quot;1-Healthy_KRT-B1_num_genes_8841_num_cells_157_percent_1.66_bulk&quot;       
+[11] &quot;2-NonLesional_KRT-B1_num_genes_8561_num_cells_142_percent_1.29_bulk&quot;   
+[12] &quot;3-Disease_KRT-B1_num_genes_10920_num_cells_401_percent_3.37_bulk&quot;      
+[13] &quot;1-Healthy_KRT-B2_num_genes_12948_num_cells_1909_percent_20.16_bulk&quot;    
+[14] &quot;2-NonLesional_KRT-B2_num_genes_13707_num_cells_3924_percent_35.57_bulk&quot;
+[15] &quot;3-Disease_KRT-B2_num_genes_13762_num_cells_3721_percent_31.27_bulk&quot;    
+[16] &quot;1-Healthy_KRT-ECR_num_genes_7783_num_cells_108_percent_1.14_bulk&quot;      
+[17] &quot;2-NonLesional_KRT-ECR_num_genes_6756_num_cells_78_percent_0.71_bulk&quot;   
+[18] &quot;3-Disease_KRT-ECR_num_genes_8872_num_cells_171_percent_1.44_bulk&quot;      
+[19] &quot;1-Healthy_KRT-GR_num_genes_12351_num_cells_1100_percent_11.61_bulk&quot;    
+[20] &quot;2-NonLesional_KRT-GR_num_genes_11157_num_cells_457_percent_4.14_bulk&quot;  
+[21] &quot;3-Disease_KRT-GR_num_genes_10234_num_cells_193_percent_1.62_bulk&quot;      
+[22] &quot;1-Healthy_KRT-SP_num_genes_13079_num_cells_2593_percent_27.38_bulk&quot;    
+[23] &quot;2-NonLesional_KRT-SP_num_genes_13648_num_cells_4431_percent_40.16_bulk&quot;
+[24] &quot;3-Disease_KRT-SP_num_genes_12802_num_cells_1871_percent_15.72_bulk&quot;    
+[25] &quot;1-Healthy_MAC_num_genes_10720_num_cells_75_percent_0.79_bulk&quot;          
+[26] &quot;2-NonLesional_MAC_num_genes_10462_num_cells_63_percent_0.57_bulk&quot;      
+[27] &quot;3-Disease_MAC_num_genes_12454_num_cells_192_percent_1.61_bulk&quot;         
+[28] &quot;1-Healthy_MEL_num_genes_13299_num_cells_591_percent_6.24_bulk&quot;         
+[29] &quot;2-NonLesional_MEL_num_genes_13235_num_cells_503_percent_4.56_bulk&quot;     
+[30] &quot;3-Disease_MEL_num_genes_11742_num_cells_151_percent_1.27_bulk&quot;         
+[31] &quot;1-Healthy_NK_num_genes_11275_num_cells_228_percent_2.41_bulk&quot;          
+[32] &quot;2-NonLesional_NK_num_genes_9811_num_cells_80_percent_0.73_bulk&quot;        
+[33] &quot;3-Disease_NK_num_genes_12048_num_cells_365_percent_3.07_bulk&quot;          
+[34] &quot;1-Healthy_TConv_num_genes_11591_num_cells_303_percent_3.2_bulk&quot;        
+[35] &quot;2-NonLesional_TConv_num_genes_10372_num_cells_145_percent_1.31_bulk&quot;   
+[36] &quot;3-Disease_TConv_num_genes_12256_num_cells_571_percent_4.8_bulk&quot;        
+[37] &quot;1-Healthy_Treg_num_genes_10566_num_cells_140_percent_1.48_bulk&quot;        
+[38] &quot;2-NonLesional_Treg_num_genes_10429_num_cells_144_percent_1.31_bulk&quot;    
+[39] &quot;3-Disease_Treg_num_genes_13003_num_cells_1073_percent_9.02_bulk&quot;       </code></pre>
+<pre class="r"><code># This function will now cross reference the ligand and receptor database, and then annotate this information into fData
+phs002455_processed_UMItable &lt;- id_rl(phs002455_processed_UMItable)
+# The ligand and receptor annotations are written into fData(). The IFNG entries are highlighted below.
+fData(phs002455_processed_UMItable)[c(&quot;IFNG&quot;, &quot;IFNGR1&quot;, &quot;IFNGR2&quot;),c(53:56)]</code></pre>
+<pre><code>       networks_Receptors networks_ligands networks_ligs_to_receptor
+IFNG                FALSE             TRUE                      &lt;NA&gt;
+IFNGR1               TRUE            FALSE                      IFNG
+IFNGR2               TRUE            FALSE                      IFNG
+       networks_receptor_to_ligs
+IFNG               IFNGR1_IFNGR2
+IFNGR1                      &lt;NA&gt;
+IFNGR2                      &lt;NA&gt;</code></pre>
+<div id="plot-ligands" class="section level4">
+<h4>Plot Ligands</h4>
+<pre class="r"><code>vals &lt;- which(fData(phs002455_processed_UMItable)[,&quot;networks_ligands&quot;])
+ligs &lt;- rownames(fData(phs002455_processed_UMItable))[vals]
+length(ligs)</code></pre>
+<pre><code>[1] 278</code></pre>
+<pre class="r"><code>plot_heatmap(phs002455_processed_UMItable, genes = ligs, type = &quot;bulk&quot;, cluster_by = &quot;row&quot;,facet_by = &quot;Cluster_Refined&quot;, pdf_format = &quot;tile&quot;, scale_by = &quot;row&quot;, cluster_type = &quot;kmeans&quot;, k = 15)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-17-1.png" width="576" /></p>
+</div>
+<div id="plot-receptors" class="section level4">
+<h4>Plot Receptors</h4>
+<pre class="r"><code>vals &lt;- which(fData(phs002455_processed_UMItable)[,&quot;networks_Receptors&quot;])
+recs &lt;- rownames(fData(phs002455_processed_UMItable))[vals]
+length(recs)</code></pre>
+<pre><code>[1] 319</code></pre>
+<pre class="r"><code>plot_heatmap(phs002455_processed_UMItable, genes = recs, type = &quot;bulk&quot;, cluster_by = &quot;row&quot;,facet_by = &quot;Cluster_Refined&quot;, pdf_format = &quot;tile&quot;, scale_by = &quot;row&quot;, cluster_type = &quot;kmeans&quot;, k = 15)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-18-1.png" width="576" /></p>
+</div>
+</div>
+<div id="build-ligand-and-receptor-table" class="section level3">
+<h3>Build ligand and receptor table</h3>
+<p>Now we can calculate the long format network table. Please note this step is slow and poorly optimized… it needs to be rewritten. On my laptop it takes about 30 minutes to run.</p>
+<p>Please keep in mind the network scales exponentially with the number of groups you provide. For each individual ligand or receptor, a node is created when the cell type expresses it, and an edge between all of its expressed pairs. This means that if 5 cells express ligand A which binds to receptor B, there will be 5 ligand A nodes, and an edge from each of them to receptor B node. The more promiscuous a given ligand and receptor interaction, and the more cell types in the data, this network quickly explodes to become unmanageable in size.</p>
+<p>We have found 10-15 cell types is the upper limit of what can be done on a local computer without needing a cluster environment.</p>
+<p>For convenience a download link to the output file is provided below, however you may opt to run the command on your own.</p>
+<pre class="r"><code>### Warning Slow!!! Use provided output table for speed. The command is left commented for speed reasons ### 
+# network_table &lt;- calc_rl_connections(phs002455_processed_UMItable, nodes = &quot;Cluster_Refined&quot;, group_by = &quot;Skin&quot;, print_progress = T)
+load(url(&quot;https://www.dropbox.com/s/p30mwg5pcj58cc6/network_table.Rdata?dl=1&quot;))
+str(network_table)</code></pre>
+<pre><code>List of 3
+ $ Summary         :&#39;data.frame&#39;:   507 obs. of  6 variables:
+  ..$ Lig_produce           : chr [1:507] &quot;CD8&quot; &quot;CD8&quot; &quot;CD8&quot; &quot;CD8&quot; ...
+  ..$ Rec_receive           : chr [1:507] &quot;CD8&quot; &quot;CD8&quot; &quot;CD8&quot; &quot;DC&quot; ...
+  ..$ Skin                  : chr [1:507] &quot;1-Healthy&quot; &quot;2-NonLesional&quot; &quot;3-Disease&quot; &quot;1-Healthy&quot; ...
+  ..$ num_connections       : int [1:507] 133 141 141 113 115 115 107 106 110 69 ...
+  ..$ fraction_connections  : num [1:507] 0.01154 0.01291 0.01059 0.00981 0.01053 ...
+  ..$ proportion_connections: num [1:507] 0.0968 0.1004 0.0999 0.0822 0.0819 ...
+ $ full_network    :&#39;data.frame&#39;:   47540 obs. of  21 variables:
+  ..$ Cluster_Refined               : chr [1:47540] &quot;KRT-SP&quot; &quot;KRT-SP&quot; &quot;KRT-SP&quot; &quot;KRT-SP&quot; ...
+  ..$ Ligand                        : chr [1:47540] &quot;GPI&quot; &quot;HLA-A&quot; &quot;HLA-B&quot; &quot;APP&quot; ...
+  ..$ Cluster_Refined               : chr [1:47540] &quot;KRT-SP&quot; &quot;KRT-SP&quot; &quot;KRT-SP&quot; &quot;KRT-SP&quot; ...
+  ..$ Receptor                      : chr [1:47540] &quot;AMFR&quot; &quot;APLP2&quot; &quot;CANX&quot; &quot;CAV1&quot; ...
+  ..$ Skin                          : chr [1:47540] &quot;1-Healthy&quot; &quot;1-Healthy&quot; &quot;1-Healthy&quot; &quot;1-Healthy&quot; ...
+  ..$ Ligand_expression             : num [1:47540] 142.5 412.4 959.8 58.1 59.9 ...
+  ..$ Receptor_expression           : num [1:47540] 36.1 31.3 190.2 81.4 81.4 ...
+  ..$ Connection_product            : num [1:47540] 5150 12928 182571 4726 4876 ...
+  ..$ log10_Connection_product      : num [1:47540] 3.71 4.11 5.26 3.67 3.69 ...
+  ..$ Connection_ratio              : num [1:47540] 3.946 13.157 5.046 0.714 0.736 ...
+  ..$ log10_Connection_ratio        : num [1:47540] 0.596 1.119 0.703 -0.146 -0.133 ...
+  ..$ Connection_rank_coarse        : num [1:47540] 1913 1361 308 1971 1957 ...
+  ..$ Connection_Z_coarse           : num [1:47540] 2.46 2.76 3.64 2.43 2.44 ...
+  ..$ Connection_rank_coarse_grouped: num [1:47540] 684 493 104 712 705 ...
+  ..$ Connection_Z_coarse_grouped   : num [1:47540] 2.41 2.7 3.56 2.38 2.39 ...
+  ..$ Connection_rank_fine          : num [1:47540] 92 52 4 99 95 44 63 161 5 187 ...
+  ..$ Connection_Z_fine             : num [1:47540] 2.99 3.35 4.38 2.96 2.97 ...
+  ..$ Connection_rank_fine_grouped  : num [1:47540] 38 23 2 41 40 19 26 62 3 68 ...
+  ..$ Connection_Z_fine_grouped     : num [1:47540] 2.85 3.2 4.18 2.82 2.83 ...
+  ..$ Zscores_genes                 : num [1:47540] 0.0813 -0.3408 -1.5589 0.9897 1.4664 ...
+  ..$ Zscores_genes_grouped         : num [1:47540] 0.0538 -0.3484 -1.528 0.9381 1.5023 ...
+ $ full_network_raw:&#39;data.frame&#39;:   351351 obs. of  21 variables:
+  ..$ Cluster_Refined               : chr [1:351351] &quot;KRT-SP&quot; &quot;KRT-SP&quot; &quot;KRT-SP&quot; &quot;KRT-SP&quot; ...
+  ..$ Ligand                        : chr [1:351351] &quot;CALM1&quot; &quot;CALM2&quot; &quot;CALM3&quot; &quot;LIN7C&quot; ...
+  ..$ Cluster_Refined               : chr [1:351351] &quot;KRT-SP&quot; &quot;KRT-SP&quot; &quot;KRT-SP&quot; &quot;KRT-SP&quot; ...
+  ..$ Receptor                      : chr [1:351351] &quot;ABCA1&quot; &quot;ABCA1&quot; &quot;ABCA1&quot; &quot;ABCA1&quot; ...
+  ..$ Skin                          : chr [1:351351] &quot;1-Healthy&quot; &quot;1-Healthy&quot; &quot;1-Healthy&quot; &quot;1-Healthy&quot; ...
+  ..$ Ligand_expression             : num [1:351351] 409.5 608.3 203.5 32.3 54.3 ...
+  ..$ Receptor_expression           : num [1:351351] 0 0 0 0 0 0 0 0 0 0 ...
+  ..$ Connection_product            : num [1:351351] 0 0 0 0 0 0 0 0 0 0 ...
+  ..$ log10_Connection_product      : num [1:351351] 0 0 0 0 0 0 0 0 0 0 ...
+  ..$ Connection_ratio              : num [1:351351] 0 0 0 0 0 0 0 0 0 0 ...
+  ..$ log10_Connection_ratio        : num [1:351351] 0 0 0 0 0 0 0 0 0 0 ...
+  ..$ Connection_rank_coarse        : num [1:351351] 15109 15109 15109 15109 15109 ...
+  ..$ Connection_Z_coarse           : num [1:351351] -0.356 -0.356 -0.356 -0.356 -0.356 ...
+  ..$ Connection_rank_coarse_grouped: num [1:351351] 5035 5035 5035 5035 5035 ...
+  ..$ Connection_Z_coarse_grouped   : num [1:351351] -0.357 -0.357 -0.357 -0.357 -0.357 ...
+  ..$ Connection_rank_fine          : num [1:351351] 1145 1145 1145 1145 1145 ...
+  ..$ Connection_Z_fine             : num [1:351351] -0.327 -0.327 -0.327 -0.327 -0.327 ...
+  ..$ Connection_rank_fine_grouped  : num [1:351351] 382 382 382 382 382 382 382 382 382 382 ...
+  ..$ Connection_Z_fine_grouped     : num [1:351351] -0.329 -0.329 -0.329 -0.329 -0.329 ...
+  ..$ Zscores_genes                 : num [1:351351] -0.288 -0.288 -0.288 -0.263 -0.191 ...
+  ..$ Zscores_genes_grouped         : num [1:351351] -0.288 -0.288 -0.288 -0.263 -0.19 ...</code></pre>
+<pre class="r"><code># The lists contains 3 entries. 
+# Summary provides a high level view of the number of connections between cell types.
+# full_network is the same as full_network_raw, except that full_network_raw will preserve entries where either the ligand or receptor is 0 in expression. 
+head(network_table$full_network)</code></pre>
+<pre><code>   Cluster_Refined Ligand Cluster_Refined Receptor      Skin Ligand_expression
+27          KRT-SP    GPI          KRT-SP     AMFR 1-Healthy         142.54554
+28          KRT-SP  HLA-A          KRT-SP    APLP2 1-Healthy         412.41139
+46          KRT-SP  HLA-B          KRT-SP     CANX 1-Healthy         959.83108
+48          KRT-SP    APP          KRT-SP     CAV1 1-Healthy          58.08089
+50          KRT-SP  CYR61          KRT-SP     CAV1 1-Healthy          59.91347
+51          KRT-SP  GNAI2          KRT-SP     CAV1 1-Healthy         195.81901
+   Receptor_expression Connection_product log10_Connection_product
+27            36.12779           5149.856                 3.711795
+28            31.34619          12927.527                 4.111515
+46           190.21150         182570.911                 5.261432
+48            81.37710           4726.455                 3.674535
+50            81.37710           4875.584                 3.688027
+51            81.37710          15935.183                 4.202357
+   Connection_ratio log10_Connection_ratio Connection_rank_coarse
+27        3.9455924              0.5961122                   1913
+28       13.1566661              1.1191459                   1361
+46        5.0461254              0.7029580                    308
+48        0.7137253             -0.1464689                   1971
+50        0.7362448             -0.1329777                   1957
+51        2.4063160              0.3813527                   1231
+   Connection_Z_coarse Connection_rank_coarse_grouped
+27            2.459681                            684
+28            2.762894                            493
+46            3.635177                            104
+48            2.431417                            712
+50            2.441651                            705
+51            2.831803                            433
+   Connection_Z_coarse_grouped Connection_rank_fine Connection_Z_fine
+27                    2.405913                   92          2.994012
+28                    2.703450                   52          3.351666
+46                    3.559407                    4          4.380566
+48                    2.378178                   99          2.960674
+50                    2.388220                   95          2.972745
+51                    2.771069                   44          3.432948
+   Connection_rank_fine_grouped Connection_Z_fine_grouped Zscores_genes
+27                           38                  2.853324    0.08134314
+28                           23                  3.196009   -0.34080106
+46                            2                  4.181846   -1.55893737
+48                           41                  2.821381    0.98973688
+50                           40                  2.832947    1.46642871
+51                           19                  3.273889    0.80125671
+   Zscores_genes_grouped
+27            0.05375211
+28           -0.34838912
+46           -1.52802185
+48            0.93809202
+50            1.50234668
+51            0.77596199</code></pre>
+<p>Each row is defined as a cell type expressing a ligand, a cell type expressing the receptor, as well as the condition (Skin, ie Healthy, Non-lesional, Lesional), the expression values of the ligand and receptor, as well as the log10_Connection_product, which is a log10 transformed product of the ligand and expression CPM values.</p>
+<p>There are also some basic statistics for these connections (z scores, etc), however these are not used in the manuscript and are beyond the scope of this vignette.</p>
+</div>
+<div id="build-igraph-object" class="section level3">
+<h3>Build igraph object</h3>
+<p>Now we can take this long format table, and convert it into an igraph object. There are several ways this could be done…</p>
+<p>One way would be to create 3 separate networks. One for healthy, one for non-lesional, one for lesional. However this has caveats. Because a ligand or receptor may go from OFF to ON, this means the landscape (the nodes and edges of the network) would change between conditions. To avoid this complexity, we opted to create a network that is a superset of all available networks (merge_all = T argument). In this way all possible nodes and edges are represented. Later on, we then query the original network_table in order to determine the edge values associate with each condition.</p>
+<p>Please note that these functions write out files by DEFAULT. These files include plots and data. Set your working directory accordingly to track these files location. The prefix argument determines the prefix for these written files. Here we use the log10_Connection_product as the edge values for this network.</p>
+<pre class="r"><code>network_igraph &lt;- build_rl_network(input = network_table, merge_all = T, value = &quot;log10_Connection_product&quot;, prefix = &quot;scitranslmed.abd8995_network&quot;)
+names(network_igraph)</code></pre>
+<pre><code>[1] &quot;igraph_Network&quot;     &quot;layout&quot;             &quot;clusters&quot;          
+[4] &quot;clusters_subgraphs&quot; &quot;interactive&quot;       </code></pre>
+<p>The igraph_network is the full network</p>
+<p>The layout is a 2D matrix with node positions</p>
+<p>Clusters shows the cluster membership of each node</p>
+<p>clusters_subgraphs contains the subgraphs for each cluster</p>
+<p>interactive is the web browser based display. Keep in mind this renders in browser and can take a long time to fully render for the full network.</p>
+</div>
+<div id="analyze-igraph-object" class="section level3">
+<h3>Analyze igraph object</h3>
+<p>The network contains both a main connected body, as well as some orphan ligands and receptors with no annotated edge to connect them to the main network. For this reason, further clustering is only performed on the main graph (subset = 1, subset_on = “connected” arguments)</p>
+<pre class="r"><code>network_igraph_C1_analyzed &lt;- analyze_rl_network(network_igraph, subset = 1, subset_on = &quot;connected&quot;, prefix = &quot;scitranslmed.abd8995_network_C1&quot;, cluster_type = &quot;louvain&quot;, merge_singles = F)
+names(network_igraph_C1_analyzed)</code></pre>
+<pre><code> [1] &quot;Degree&quot;                  &quot;Node_degree&quot;            
+ [3] &quot;Node_betweeness&quot;         &quot;Node_authority&quot;         
+ [5] &quot;Edge_degree&quot;             &quot;Edge_betweeness&quot;        
+ [7] &quot;Edge_hub&quot;                &quot;Crossing&quot;               
+ [9] &quot;Clusters_Results&quot;        &quot;Clusters_individual&quot;    
+[11] &quot;Clusters_betweeness&quot;     &quot;Clusters_edge_hub&quot;      
+[13] &quot;Clusters_node_authority&quot; &quot;Interactive&quot;            
+[15] &quot;igraph_Network&quot;          &quot;layout&quot;                 </code></pre>
+<p>The output contains statistics related to the clustering results, as well as individual cluster results and the interactive network.</p>
+<p>The html files are a great way to view the network. Please note that they are rendered in the browser, so the full network can take a few minutes to display properly. There are drop down menus that allow you to select a particular node of interest, as well as a particular community (cluster) of the network.</p>
+</div>
+<div id="plot-network" class="section level3">
+<h3>Plot network</h3>
+<pre class="r"><code>input_cell_net &lt;- network_igraph_C1_analyzed$igraph_Network
+V(input_cell_net)$membership &lt;- network_igraph_C1_analyzed$Clusters_Results$membership
+clusters &lt;- network_igraph_C1_analyzed$Clusters_Results
+weights_clusters &lt;- ifelse(crossing(clusters, input_cell_net), 1, 10)
+set.seed(10)
+cluster_weighted_layout &lt;- layout_with_fr(input_cell_net, weights = weights_clusters)
+edge_colors &lt;- ifelse(crossing(clusters, input_cell_net), &quot;red&quot;, &quot;black&quot;)
+members &lt;- V(input_cell_net)$membership
+colopal &lt;- RColorBrewer::brewer.pal(n = 8, name = &quot;Dark2&quot;)
+f &lt;- colorRampPalette(colopal)
+colopal &lt;- f(length(unique(members)))
+colopal &lt;- colopal[as.factor(members)]
+plot(input_cell_net,
+     layout = cluster_weighted_layout,
+     vertex.color = colopal,
+     vertex.size = 1.5,
+     vertex.label = &quot;&quot;,
+     vertex.label.cex = 1,
+     vertex.label.color = &quot;black&quot;,
+     vertex.frame.color=colopal,
+     edge.width = 0.1,
+     edge.arrow.size = 0.01,
+     edge.arrow.width = 0.1,
+     edge.color = &quot;gray50&quot;)</code></pre>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
