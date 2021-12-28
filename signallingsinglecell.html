@@ -340,6 +340,13 @@ div.tocify {
     DolphinSuite
   </a>
 </li>
+<li>
+  <a href="browse.html">
+    <span class="fa fa-project-diagram"></span>
+     
+    Cellxgene Browser
+  </a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
@@ -421,10 +428,11 @@ div.tocify {
 <p>The data used in this vignette is derived from Bone marrow extracted from 6-8 week old female C57 mice, and floating cells were collected on day 8 after derivation with GM-CSF following the protocol in (Donnard et al., 2018). BMDCs were then stimulated with LPS for 0, 1, and 4 hr before performing scRNA-seq using an in house built inDrop system (Klein et al., 2015).</p>
 <div id="package-and-data-loading" class="section level2">
 <h2>Package and Data Loading</h2>
-<pre class="r"><code>library(&quot;SignallingSingleCell&quot;)
+<pre class="r"><code># devtools::install_github(&quot;garber-lab/SignallingSingleCell&quot;)
+library(&quot;SignallingSingleCell&quot;)
 library(kernlab)
-load(url(&quot;https://galaxyweb.umassmed.edu/pub/class/mDC_UMI_Table.Rdata&quot;))
-load(url(&quot;https://galaxyweb.umassmed.edu/pub/class/ex_sc_skin.Rdata&quot;))</code></pre>
+load(url(&quot;https://vitiligo.dolphinnext.com/data/mDC_UMI_Table.Rdata&quot;))
+load(url(&quot;https://vitiligo.dolphinnext.com/data/ex_sc_skin.Rdata&quot;))</code></pre>
 </div>
 <div id="preprocessing" class="section level2">
 <h2>Preprocessing</h2>
@@ -500,7 +508,7 @@ ex_sc &lt;- pre_filter(ex_sc, minUMI = 1000, maxUMI = 10000, threshold = 1, minC
 [1] &quot;Filtering Low Cells&quot;</code></pre>
 <pre class="r"><code>ex_sc &lt;- calc_libsize(ex_sc, suffix = &quot;raw_filtered&quot;)
 plot_density(ex_sc, title = &quot;UMI Density&quot;,  val = &quot;UMI_sum_raw_filtered&quot;, statistic = &quot;mean&quot;)  </code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <pre class="r"><code>head(pData(ex_sc))</code></pre>
 <pre><code>                      Timepoint UMI_sum_raw UMI_sum_raw_filtered
 0hrA_TGACGGACAAGTAATC       0hr        4572                 4570
@@ -511,7 +519,7 @@ plot_density(ex_sc, title = &quot;UMI Density&quot;,  val = &quot;UMI_sum_raw_fi
 0hrA_AAATCAGAGATCTCGG       0hr        6618                 6601</code></pre>
 <pre class="r"><code>plot_density_ridge(ex_sc, title = &quot;UMI Density&quot;,  val = &quot;UMI_sum_raw_filtered&quot;, color_by = &quot;Timepoint&quot;)  </code></pre>
 <pre><code>Picking joint bandwidth of 444</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
 </div>
 </div>
 <div id="basic-scrna-seq-analysis" class="section level2">
@@ -533,30 +541,30 @@ Read the 3812 x 6 data matrix successfully!
 Using no_dims = 2, perplexity = 30.000000, and theta = 0.500000
 Computing input similarities...
 Building tree...
-Done in 0.32 seconds (sparsity = 0.030912)!
+Done in 0.31 seconds (sparsity = 0.030912)!
 Learning embedding...
-Iteration 50: error is 85.845353 (50 iterations in 0.56 seconds)
-Iteration 100: error is 75.307034 (50 iterations in 0.59 seconds)
-Iteration 150: error is 74.450519 (50 iterations in 0.51 seconds)
-Iteration 200: error is 74.241244 (50 iterations in 0.45 seconds)
-Iteration 250: error is 74.171178 (50 iterations in 0.45 seconds)
-Iteration 300: error is 2.164292 (50 iterations in 0.41 seconds)
-Iteration 350: error is 1.796806 (50 iterations in 0.39 seconds)
-Iteration 400: error is 1.621976 (50 iterations in 0.41 seconds)
-Iteration 450: error is 1.521631 (50 iterations in 0.41 seconds)
-Iteration 500: error is 1.460825 (50 iterations in 0.41 seconds)
-Fitting performed in 4.59 seconds.</code></pre>
+Iteration 50: error is 85.845353 (50 iterations in 0.50 seconds)
+Iteration 100: error is 75.307036 (50 iterations in 0.49 seconds)
+Iteration 150: error is 74.449677 (50 iterations in 0.44 seconds)
+Iteration 200: error is 74.240812 (50 iterations in 0.42 seconds)
+Iteration 250: error is 74.171150 (50 iterations in 0.42 seconds)
+Iteration 300: error is 2.162252 (50 iterations in 0.38 seconds)
+Iteration 350: error is 1.794241 (50 iterations in 0.37 seconds)
+Iteration 400: error is 1.620242 (50 iterations in 0.39 seconds)
+Iteration 450: error is 1.520989 (50 iterations in 0.39 seconds)
+Iteration 500: error is 1.459182 (50 iterations in 0.40 seconds)
+Fitting performed in 4.20 seconds.</code></pre>
 <pre class="r"><code>plot_tsne_metadata(ex_sc, color_by = &quot;Timepoint&quot;) </code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <pre class="r"><code>ex_sc &lt;- dim_reduce(ex_sc, genelist = gene_subset, pre_reduce = &quot;iPCA&quot;, nComp = 12, tSNE_perp = 30, iterations = 500, print_progress=FALSE) 
 plot_tsne_metadata(ex_sc, color_by = &quot;Timepoint&quot;) </code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
 <pre class="r"><code>plot_tsne_metadata(ex_sc, color_by = &quot;iPC_Comp1&quot;, title = &quot;PC1 cell loadings&quot;) </code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-6-3.png" width="672" /></p>
 <pre class="r"><code>plot_tsne_metadata(ex_sc, color_by = &quot;iPC_Comp2&quot;, title = &quot;PC2 cell loadings&quot;) </code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-4.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-6-4.png" width="672" /></p>
 <pre class="r"><code>plot_tsne_metadata(ex_sc, color_by = &quot;iPC_Comp3&quot;, title = &quot;PC3 cell loadings&quot;) </code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-5-5.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-6-5.png" width="672" /></p>
 </div>
 <div id="clustering" class="section level3">
 <h3>Clustering</h3>
@@ -567,9 +575,9 @@ ex_sc &lt;- cluster_sc(ex_sc, dimension = &quot;2d&quot;, method = &quot;density
 <pre><code>Distance cutoff calculated to 0.05082406 </code></pre>
 <pre class="r"><code>ex_sc$cluster_density &lt;- ex_sc$Cluster
 plot_tsne_metadata(ex_sc, color_by = &quot;cluster_spectral&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <pre class="r"><code>plot_tsne_metadata(ex_sc, color_by = &quot;cluster_density&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
 </div>
 <div id="cell-type-identification" class="section level3">
 <h3>Cell Type identification</h3>
@@ -581,7 +589,7 @@ plot_tsne_metadata(ex_sc, color_by = &quot;cluster_spectral&quot;)</code></pre>
 <pre class="r"><code>ex_sc &lt;- calc_agg_bulk(ex_sc, aggregate_by = &quot;Cluster&quot;)
 markers &lt;- return_markers(ex_sc, num_markers = 15) 
 plot_heatmap(ex_sc, genes = unique(unlist(markers)), type = &quot;bulk&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 </div>
 <div id="normalization" class="section level3">
 <h3>Normalization</h3>
@@ -598,9 +606,9 @@ ex_sc_norm &lt;- construct_ex_sc(x) # Make a new expression set with normalized 
 pData(ex_sc_norm) &lt;- pData(ex_sc) # Copy over the pData
 ex_sc_norm &lt;- calc_libsize(ex_sc_norm, suffix = &quot;CP10k&quot;)
 plot_tsne_metadata(ex_sc_norm, color_by = &quot;UMI_sum_raw&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <pre class="r"><code>plot_tsne_metadata(ex_sc_norm, color_by = &quot;UMI_sum_CP10k&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
 </div>
 </div>
 <div id="advanced-scrna-seq-analysis" class="section level2">
@@ -613,11 +621,11 @@ panel2 &lt;- c(&quot;Ccr7&quot;, &quot;Fscn1&quot;, &quot;Flt3&quot;) # DC
 panel3 &lt;- c(&quot;Mertk&quot;, &quot;Csf1r&quot;) # Mac
 panels &lt;- list(panel1, panel2, panel3)
 plot_tsne_gene(ex_sc_norm, gene = panels[[1]], title = &quot;&quot;, log_scale = T)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre class="r"><code>plot_tsne_gene(ex_sc_norm, gene = panels[[2]], title = &quot;&quot;, log_scale = T)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
 <pre class="r"><code>plot_tsne_gene(ex_sc_norm, gene = panels[[3]], title = &quot;&quot;, log_scale = T)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-3.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
 <pre class="r"><code>names(panels) &lt;- c(&quot;Neutrophil&quot;, &quot;Dendritic&quot;, &quot;Macrophage&quot;)
 panels</code></pre>
 <pre><code>$Neutrophil
@@ -629,13 +637,13 @@ $Dendritic
 $Macrophage
 [1] &quot;Mertk&quot; &quot;Csf1r&quot;</code></pre>
 <pre class="r"><code>ex_sc_norm &lt;- flow_filter(ex_sc_norm, panels = panels, title = &quot;Flow Pass Cells&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-4.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-4.png" width="672" /></p>
 <pre class="r"><code>ex_sc_norm &lt;- flow_svm(ex_sc_norm, pcnames = &quot;Comp&quot;)</code></pre>
 <pre><code>Loading required package: lattice</code></pre>
 <pre class="r"><code>plot_tsne_metadata(ex_sc_norm, color_by = &quot;cluster_spectral&quot;, facet_by = &quot;Timepoint&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-5.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-5.png" width="672" /></p>
 <pre class="r"><code>plot_tsne_metadata(ex_sc_norm, color_by = &quot;SVM_Classify&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-9-6.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-6.png" width="672" /></p>
 </div>
 <div id="de-analysis" class="section level3">
 <h3>DE analysis</h3>
@@ -673,31 +681,31 @@ SVM_Classify  0hr  4hr
 <pre><code>Doing likelihood ratio fit...</code></pre>
 <pre class="r"><code># Macrophages
 g &lt;- plot_volcano(de_path = &quot;~/Downloads/&quot;, de_file = &quot;Macrophage_4hr_DEresults.tsv&quot;, fdr_cut = 1E-150, logfc_cut = 1)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>plot(g)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
 <pre class="r"><code>mac_de &lt;- unique(g$data$label)
 mac_de &lt;- mac_de[-which(mac_de == &quot;&quot;)]
 plot_violin(ex_sc_norm_0_4, color_by = &quot;Timepoint&quot;, facet_by = &quot;SVM_Classify&quot;, gene = &quot;Rsad2&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-11-3.png" width="672" /></p>
 <pre class="r"><code># DCs
 g &lt;- plot_volcano(de_path = &quot;~/Downloads/&quot;, de_file = &quot;Dendritic_4hr_DEresults.tsv&quot;, fdr_cut = 0.0001, logfc_cut = 2)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-4.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-11-4.png" width="672" /></p>
 <pre class="r"><code>plot(g)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-5.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-11-5.png" width="672" /></p>
 <pre class="r"><code>dc_de &lt;- unique(g$data$label)
 dc_de &lt;- dc_de[-which(dc_de == &quot;&quot;)]
 plot_violin(ex_sc_norm_0_4, color_by = &quot;Timepoint&quot;, facet_by = &quot;SVM_Classify&quot;, gene = &quot;Ifit1&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-6.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-11-6.png" width="672" /></p>
 <pre class="r"><code># Neutrophils
 g &lt;- plot_volcano(de_path = &quot;~/Downloads/&quot;, de_file = &quot;Neutrophil_4hr_DEresults.tsv&quot;, fdr_cut = 1E-5, logfc_cut = 3)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-7.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-11-7.png" width="672" /></p>
 <pre class="r"><code>plot(g)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-8.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-11-8.png" width="672" /></p>
 <pre class="r"><code>neut_de &lt;- unique(g$data$label)
 neut_de &lt;- neut_de[-which(neut_de == &quot;&quot;)]
 plot_violin(ex_sc_norm_0_4, color_by = &quot;Timepoint&quot;, facet_by = &quot;SVM_Classify&quot;, gene = &quot;Mmp9&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-9.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-11-9.png" width="672" /></p>
 <pre class="r"><code># Heatmap of these DE genes
 all_de &lt;- c(mac_de, dc_de, neut_de)
 unique(all_de)</code></pre>
@@ -751,7 +759,7 @@ unique(all_de)</code></pre>
 [189] &quot;Capza2&quot;       </code></pre>
 <pre class="r"><code>ex_sc_norm &lt;- calc_agg_bulk(ex_sc_norm, aggregate_by = c(&quot;Timepoint&quot;, &quot;SVM_Classify&quot;))
 plot_heatmap(ex_sc_norm, genes = c(mac_de, dc_de, neut_de), type = &quot;bulk&quot;, facet_by = &quot;SVM_Classify&quot;, gene_names = F)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-10-10.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-11-10.png" width="672" /></p>
 </div>
 </div>
 </div>
@@ -772,9 +780,9 @@ plot_heatmap(ex_sc_norm, genes = c(mac_de, dc_de, neut_de), type = &quot;bulk&qu
 <pre class="r"><code># devtools::install_github(&quot;garber-lab/SignallingSingleCell&quot;)
 library(SignallingSingleCell)
 library(kernlab)
-# load(url(&quot;https://www.dropbox.com/s/y967oe6vwk1jue2/phs002455.v1.p1_UMITable.Rdata?dl=1&quot;)) # The Raw Data
-load(url(&quot;https://www.dropbox.com/s/s49jt231j9gib5u/phs002455_processed_UMItable.Rdata?dl=1&quot;))
-load(url(&quot;https://www.dropbox.com/s/clcd7oref1yil5x/phs002455_TCells_processed_UMItable.Rdata?dl=1&quot;))</code></pre>
+# load(url(&quot;https://vitiligo.dolphinnext.com/data/phs002455.v1.p1_UMITable.Rdata&quot;)) # The Raw Data
+load(url(&quot;https://vitiligo.dolphinnext.com/data/phs002455_processed_UMItable.Rdata&quot;))
+load(url(&quot;https://vitiligo.dolphinnext.com/data/phs002455_TCells_processed_UMItable.Rdata&quot;))</code></pre>
 </div>
 </div>
 <div id="data-exploration" class="section level2">
@@ -812,12 +820,12 @@ colnames(fData(phs002455_processed_UMItable))</code></pre>
 <h3>Figure 1B</h3>
 <p>Reproduce Figure 1B from <a href="https://www.science.org/doi/10.1126/scitranslmed.abd8995" class="uri">https://www.science.org/doi/10.1126/scitranslmed.abd8995</a></p>
 <pre class="r"><code>plot_tsne_metadata(phs002455_processed_UMItable, color_by = &quot;Cluster_Fig_1B&quot;, shuffle = T)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-13-1.png" width="960" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-15-1.png" width="960" /></p>
 <pre class="r"><code>plot_tsne_gene(phs002455_processed_UMItable, gene = c(&quot;TRAC&quot;, &quot;TYR&quot;))</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-13-2.png" width="960" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-15-2.png" width="960" /></p>
 <pre class="r"><code># Additional plots
 plot_violin(phs002455_processed_UMItable, gene = c(&quot;IFNG&quot;), color_by = &quot;Skin&quot;, facet_by = &quot;Cluster_Refined&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-13-3.png" width="960" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-15-3.png" width="960" /></p>
 <pre class="r"><code>markers &lt;- return_markers(phs002455_processed_UMItable, return_by = &quot;Cluster_Refined&quot;, num_markers = 5)
 markers</code></pre>
 <pre><code>$CD8_Markers
@@ -859,15 +867,15 @@ $TConv_Markers
 $Treg_Markers
 [1] &quot;CD27&quot;  &quot;CD3D&quot;  &quot;IL32&quot;  &quot;TRBC2&quot; &quot;CTLA4&quot;</code></pre>
 <pre class="r"><code>plot_gene_dots(phs002455_processed_UMItable, genes = unique(unlist(markers)), break_by = &quot;Cluster_Refined&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-13-4.png" width="960" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-15-4.png" width="960" /></p>
 </div>
 <div id="figure-1c" class="section level3">
 <h3>Figure 1C</h3>
 <p>Reproduce Figure 1C from <a href="https://www.science.org/doi/10.1126/scitranslmed.abd8995" class="uri">https://www.science.org/doi/10.1126/scitranslmed.abd8995</a></p>
 <pre class="r"><code>plot_tsne_metadata(phs002455_TCells_processed_UMItable, color_by = &quot;Cluster&quot;, shuffle = T)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-14-1.png" width="960" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-16-1.png" width="960" /></p>
 <pre class="r"><code>plot_tsne_gene(phs002455_TCells_processed_UMItable, gene = c(&quot;TRAC&quot;, &quot;CD4&quot;, &quot;CD8A&quot;, &quot;FOXP3&quot;, &quot;TRGC1&quot;, &quot;FCER1G&quot;))</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-14-2.png" width="960" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-16-2.png" width="960" /></p>
 <pre class="r"><code># To create the aggregate bulk heatmaps first calculate the aggregate bulk values
 phs002455_TCells_processed_UMItable &lt;- calc_agg_bulk(phs002455_TCells_processed_UMItable, aggregate_by = &quot;Cluster&quot;)
 # Then identify markers
@@ -899,7 +907,7 @@ $Treg_Markers
 <pre class="r"><code>markers &lt;- unique(unlist(markers))</code></pre>
 <p>Now create a heatmap using these values</p>
 <pre class="r"><code>plot_heatmap(phs002455_TCells_processed_UMItable, type = &quot;bulk&quot;, genes = markers)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-15-1.png" width="576" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-17-1.png" width="576" /></p>
 </div>
 </div>
 <div id="basic-network-analysis" class="section level2">
@@ -969,7 +977,7 @@ ligs &lt;- rownames(fData(phs002455_processed_UMItable))[vals]
 length(ligs)</code></pre>
 <pre><code>[1] 278</code></pre>
 <pre class="r"><code>plot_heatmap(phs002455_processed_UMItable, genes = ligs, type = &quot;bulk&quot;, cluster_by = &quot;row&quot;,facet_by = &quot;Cluster_Refined&quot;, pdf_format = &quot;tile&quot;, scale_by = &quot;row&quot;, cluster_type = &quot;kmeans&quot;, k = 15)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-17-1.png" width="576" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-19-1.png" width="576" /></p>
 </div>
 <div id="plot-receptors" class="section level4">
 <h4>Plot Receptors</h4>
@@ -978,7 +986,7 @@ recs &lt;- rownames(fData(phs002455_processed_UMItable))[vals]
 length(recs)</code></pre>
 <pre><code>[1] 319</code></pre>
 <pre class="r"><code>plot_heatmap(phs002455_processed_UMItable, genes = recs, type = &quot;bulk&quot;, cluster_by = &quot;row&quot;,facet_by = &quot;Cluster_Refined&quot;, pdf_format = &quot;tile&quot;, scale_by = &quot;row&quot;, cluster_type = &quot;kmeans&quot;, k = 15)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-18-1.png" width="576" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-20-1.png" width="576" /></p>
 </div>
 </div>
 <div id="build-ligand-and-receptor-table" class="section level3">
@@ -1156,7 +1164,7 @@ plot(input_cell_net,
      edge.arrow.size = 0.01,
      edge.arrow.width = 0.1,
      edge.color = &quot;gray50&quot;)</code></pre>
-<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="signallingsinglecell_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 </div>
 </div>
 </div>

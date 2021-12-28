@@ -264,6 +264,13 @@ $(document).ready(function () {
     DolphinSuite
   </a>
 </li>
+<li>
+  <a href="browse.html">
+    <span class="fa fa-project-diagram"></span>
+     
+    Cellxgene Browser
+  </a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
@@ -333,7 +340,8 @@ text-align: justify}
 }
 </style>
 <p>Vitiligo is an autoimmune skin disease characterized by the targeted destruction of melanocytes by T cells. Cytokine signaling between keratinocytes and T cells results in CD8+ T cell infiltration of vitiligo lesions, but the full scope of signals required to coordinate autoimmune responses is not completely understood (<a href="#reference">Gellatly et. al 2021</a>).</p>
-<p>We performed scRNA-seq on affected and unaffected skin from vitiligo patients, as well as healthy controls, to define the role of each cell type in coordinating autoimmunity during disease progression, and in order to analyze this high dimensional data, we have implemented a novel end-to-end scRNA data analysis package called <a href="./signallingsinglecell.html">SignallingSingleCell</a>. All raw sequencing data was processed by the scRNA-Seq inDrop pipeline developed within the interactive pipeline manager <a href="./dolphinnext.html">DolphinNext</a>.</p>
+<p>We performed scRNA-seq on affected and unaffected skin from vitiligo patients, as well as healthy controls, to define the role of each cell type in coordinating autoimmunity during disease progression, and in order to analyze this high dimensional data, we have implemented a novel end-to-end scRNA data analysis package called <a href="./signallingsinglecell.html">SignallingSingleCell</a>. You can also interactively browse the results of our manuscript and the UMI table using <a href="./browse.html">Cellxgene</a> Browser.</p>
+<p>All raw sequencing data was processed by the scRNA-Seq inDrop pipeline developed within the interactive pipeline manager <a href="./dolphinnext.html">DolphinNext</a> (<a href="#reference">Yukselen et. al 2020</a>), and currently being hosted in DolphinSuite high throughput data analysis platform.</p>
 <p>Using SignallingSingleCell, we confirmed that type 1 cytokine signaling occupied a central role in disease, but we also discovered that this pathway was used by regulatory T cells (Tregs) to restrain disease progression in non-lesional skin. We determined that CCL5-CCR5 signaling served as a chemokine circuit between effector CD8+ T cells and Tregs, and mechanistic studies in a mouse model of vitiligo revealed that CCR5 expression on Tregs was required to suppress disease in vivo but not in vitro.</p>
 <div id="raw-data" class="section level5">
 <h5><strong>Raw Data:</strong></h5>
@@ -343,18 +351,15 @@ text-align: justify}
 <div id="umi-tables" class="section level5">
 <h5><strong>UMI Tables:</strong></h5>
 <p>For convenience we are providing 3 processed data tables here. One is a raw sparse matrix, that is the output of our processing pipeline with no further manipulation. We are also providing a fully processed UMI table that has been filtered, dimension reduced, clustered, and normalized. The processed UMI table is provided in the <a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf" target="_blank">ExpressionSet</a> class format. We are also providing a separate processed UMI table for the T Cells.</p>
-<p><a href="https://www.dropbox.com/s/y967oe6vwk1jue2/phs002455.v1.p1_UMITable.Rdata?dl=1" target="_blank">Raw UMI Table</a></p>
-<p><a href="https://www.dropbox.com/s/s49jt231j9gib5u/phs002455_processed_UMItable.Rdata?dl=1" target="_blank">Processed UMI Table</a></p>
-<p><a href="https://www.dropbox.com/s/clcd7oref1yil5x/phs002455_TCells_processed_UMItable.Rdata?dl=1" target="_blank">Processed UMI Table of T-cells</a></p>
-</div>
-<div id="interactive-cellxgene-demo" class="section level5">
-<h5><strong>Interactive Cellxgene Demo:</strong></h5>
-<p>Click <a href="http://vitiligo.dolphinnext.com" target="_blank">Here</a>.</p>
+<p><a href="https://vitiligo.dolphinnext.com/data/phs002455.v1.p1_UMITable.Rdata" target="_blank">Raw UMI Table</a></p>
+<p><a href="https://vitiligo.dolphinnext.com/data/phs002455_processed_UMItable.Rdata" target="_blank">Processed UMI Table</a></p>
+<p><a href="https://vitiligo.dolphinnext.com/data/phs002455_TCells_processed_UMItable.Rdata" target="_blank">Processed UMI Table of T-cells</a></p>
 <p><img width="70%" height="70%" src="images/networkanalysis.png" class="center"></p>
 </div>
 <div id="reference" class="section level5">
 <h5>Reference</h5>
 <p>Gellatly KJ, Strassner JP, Essien K, Refat MA, Murphy RL, Coffin-Schmitt A, Pandya AG, Tovar-Garza A, Frisoli ML, Fan X, Ding X, Kim EE, Abbas Z, McDonel P, Garber M, Harris JE. scRNA-seq of human vitiligo reveals complex networks of subclinical immune activation and a role for CCR5 in Treg function. Sci Transl Med. 2021 Sep 8;13(610):eabd8995. doi: 10.1126/scitranslmed.abd8995. Epub 2021 Sep 8. PMID: 34516831; PMCID: PMC8686160. [<a href="https://www.science.org/doi/10.1126/scitranslmed.abd8995">View</a>]</p>
+<p>Yukselen, O., Turkyilmaz, O., Ozturk, A.R. et al. DolphinNext: a distributed data processing platform for high throughput genomics. BMC Genomics 21, 310 (2020). [<a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-6714-x">View</a>]</p>
 </div>
 
 

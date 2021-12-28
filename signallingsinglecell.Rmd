@@ -39,11 +39,19 @@ The data used in this vignette is derived from Bone marrow extracted from 6-8 we
 
 ## Package and Data Loading  
 
-```{r error=FALSE, message=FALSE, warning=FALSE, cache=FALSE, include=TRUE}
-library("SignallingSingleCell")
+```{r error=FALSE, message=FALSE, warning=FALSE, cache=FALSE, include=FALSE}
+library(SignallingSingleCell)
 library(kernlab)
 load(url("https://galaxyweb.umassmed.edu/pub/class/mDC_UMI_Table.Rdata"))
 load(url("https://galaxyweb.umassmed.edu/pub/class/ex_sc_skin.Rdata"))
+```
+
+```{r eval=FALSE, echo=TRUE}
+# devtools::install_github("garber-lab/SignallingSingleCell")
+library("SignallingSingleCell")
+library(kernlab)
+load(url("https://vitiligo.dolphinnext.com/data/mDC_UMI_Table.Rdata"))
+load(url("https://vitiligo.dolphinnext.com/data/ex_sc_skin.Rdata"))
 ```
 
 ## Preprocessing  
@@ -242,13 +250,22 @@ These files are protected, and you will need an account and to request access to
 
 ### Download Links
 
-```{r error=FALSE, message=FALSE, warning=FALSE, cache=FALSE, include=TRUE}
+```{r error=FALSE, message=FALSE, warning=FALSE, cache=FALSE, include=FALSE}
 # devtools::install_github("garber-lab/SignallingSingleCell")
 library(SignallingSingleCell)
 library(kernlab)
 # load(url("https://www.dropbox.com/s/y967oe6vwk1jue2/phs002455.v1.p1_UMITable.Rdata?dl=1")) # The Raw Data
 load(url("https://www.dropbox.com/s/s49jt231j9gib5u/phs002455_processed_UMItable.Rdata?dl=1"))
 load(url("https://www.dropbox.com/s/clcd7oref1yil5x/phs002455_TCells_processed_UMItable.Rdata?dl=1"))
+```
+
+```{r eval=FALSE, echo=TRUE}
+# devtools::install_github("garber-lab/SignallingSingleCell")
+library(SignallingSingleCell)
+library(kernlab)
+# load(url("https://vitiligo.dolphinnext.com/data/phs002455.v1.p1_UMITable.Rdata")) # The Raw Data
+load(url("https://vitiligo.dolphinnext.com/data/phs002455_processed_UMItable.Rdata"))
+load(url("https://vitiligo.dolphinnext.com/data/phs002455_TCells_processed_UMItable.Rdata"))
 ```
 
 ## Data Exploration  

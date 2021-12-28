@@ -13,6 +13,9 @@ navbar:
     - text: "DolphinSuite"
       icon: fa-database
       href: dolphinnext.html
+    - text: "Cellxgene Browser"
+      icon: fa-project-diagram 
+      href: browse.html
   right:
     - text: "Contact"
       icon: fa-envelope-o
