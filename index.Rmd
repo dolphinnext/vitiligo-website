@@ -1,5 +1,6 @@
 ---
-title: "Network Analysis of Human Vitiligo scRNA-seq"
+title: scRNA-seq of human vitiligo reveals complex networks of subclinical immune
+  activation and a role for CCR5 in Treg function
 ---
 
 <style>
@@ -12,13 +13,13 @@ text-align: justify}
 }
 </style>
 
-Vitiligo is an autoimmune skin disease characterized by the targeted destruction of melanocytes by T cells. Cytokine signaling between keratinocytes and T cells results in CD8+ T cell infiltration of vitiligo lesions, but the full scope of signals required to coordinate autoimmune responses is not completely understood ([Gellatly et. al 2021](#reference)).
+This site provides access to the data we used in our recent publication ([Gellatly et. al 2021](https://www.science.org/doi/10.1126/scitranslmed.abd8995)) where we sought to identify cellular communications that show disruption in lesions or in non-lesional skins of individuals suffering from Vitiligo, an autoimmune skin disease characterized by the targeted destruction of melanocytes by T cells.
 
-We performed scRNA-seq on affected and unaffected skin from vitiligo patients, as well as healthy controls, to define the role of each cell type in coordinating autoimmunity during disease progression, and in order to analyze this high dimensional data, we have implemented a novel end-to-end scRNA data analysis package called [SignallingSingleCell](./signallingsinglecell.html). You can also interactively browse the results of our manuscript and the UMI table using [Cellxgene](./browse.html) Browser. 
+The data provided was obtained using our in-house [inDrop system](https://dx.doi.org/10.1016%2Fj.cell.2015.04.044)  to generate single cell RNA-Seq profiles  on affected and unaffected skin from vitiligo patients, as well as healthy controls. The data was analyzed using our  end-to-end scRNA data analysis package called [SignallingSingleCell](./signallingsinglecell.html). 
 
-All raw sequencing data was processed by the scRNA-Seq inDrop pipeline developed within the interactive pipeline manager [DolphinNext](./dolphinnext.html) ([Yukselen et. al 2020](#reference)), and currently being hosted in DolphinSuite high throughput data analysis platform. 
+To provide access to the processed data we are hosting an interactive browser based on [Cellxgene](./browse.html) Browser. 
 
-Using SignallingSingleCell, we confirmed that type 1 cytokine signaling occupied a central role in disease, but we also discovered that this pathway was used by regulatory T cells (Tregs) to restrain disease progression in non-lesional skin. We determined that CCL5-CCR5 signaling served as a chemokine circuit between effector CD8+ T cells and Tregs, and mechanistic studies in a mouse model of vitiligo revealed that CCR5 expression on Tregs was required to suppress disease in vivo but not in vitro. 
+All raw sequencing data was processed by the scRNA-Seq inDrop pipeline developed within the interactive pipeline manager [DolphinNext](./dolphinnext.html) ([Yukselen et. al 2020](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-6714-x)), and currently being hosted in DolphinSuite high throughput data analysis platform. 
 
 ##### **Raw Data:** 
 
@@ -38,8 +39,4 @@ For convenience we are providing 3 processed data tables here. One is a raw spar
 
 <img width="70%" height="70%" src="./images/networkanalysis.png" class="center">
 
-##### Reference
 
-Gellatly KJ, Strassner JP, Essien K, Refat MA, Murphy RL, Coffin-Schmitt A, Pandya AG, Tovar-Garza A, Frisoli ML, Fan X, Ding X, Kim EE, Abbas Z, McDonel P, Garber M, Harris JE. scRNA-seq of human vitiligo reveals complex networks of subclinical immune activation and a role for CCR5 in Treg function. Sci Transl Med. 2021 Sep 8;13(610):eabd8995. doi: 10.1126/scitranslmed.abd8995. Epub 2021 Sep 8. PMID: 34516831; PMCID: PMC8686160. [<a href="https://www.science.org/doi/10.1126/scitranslmed.abd8995">View</a>]
-
-Yukselen, O., Turkyilmaz, O., Ozturk, A.R. et al. DolphinNext: a distributed data processing platform for high throughput genomics. BMC Genomics 21, 310 (2020). [<a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-6714-x">View</a>]

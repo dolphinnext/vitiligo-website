@@ -13,7 +13,7 @@ text-align: justify}
 
 All raw sequencing data and associated metadata of samples from affected and unaffected skin from vitiligo patients, as well as healthy controls, are currently hosted at DolphinSuite, a novel high throughput data analysis platform. 
 
-Raw sequenced data was processed by the scRNA-Seq inDrop pipeline developed within the interactive pipeline manager DolphinNext. A downloadable container of all required sofware and R libraries of the indrop Pipeline can be found in both Docker Hub and GitHub. 
+Raw sequenced data was processed by the scRNA-Seq inDrop pipeline developed within the interactive pipeline manager <a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-6714-x">DolphinNext</a>. A downloadable container of all required sofware and R libraries of the inDrop Pipeline can be found in both Docker Hub and GitHub. 
 
 * **Docker Hub**: <a href="https://hub.docker.com/repository/docker/dolphinnext/indrop" target="_blank">https://hub.docker.com/repository/docker/dolphinnext/indrop</a> 
 * **GitHub**: <a href="https://github.com/dolphinnext/indrop" target="_blank">https://github.com/dolphinnext/indrop</a>  
@@ -41,7 +41,7 @@ DolphinSuite is comprised of three major components that supports distinct aspec
       <img width="300" height="200" src="./images/dmeta.png" class="center">
       <br>
       <p> **Dmeta**: automated data processing and management using ontology-based metadata tracking system </p>
-      <button type="button" class="btn btn-info" onclick="window.open('https://dmeta-skin.dolphinnext.com/')">Dmeta Vitiligo Demo</button>
+      <button type="button" class="btn btn-info" onclick="window.open('https://dmeta-skin.dolphinnext.com/')">Vitiligo in Dmeta</button>
       <br>
    </td>
    <td style="text-align:center;width:33%; vertical-align: text-top;"> 
@@ -50,7 +50,7 @@ DolphinSuite is comprised of three major components that supports distinct aspec
       <br>
       <p> **Dportal**: a user-friendly and interactive data browser for filtering and querying</p>
       <br>
-      <button type="button" class="btn btn-info" onclick="window.open('https://dportal-skin.dolphinnext.com/')">Dportal Vitiligo Demo</button>
+      <button type="button" class="btn btn-info" onclick="window.open('https://dportal-skin.dolphinnext.com/')">Vitiligo in Dportal</button>
       <br>
    </td>
   </tr>
@@ -59,7 +59,3 @@ DolphinSuite is comprised of three major components that supports distinct aspec
 
 <br>
 <br>
-
-##### Reference
-
-Yukselen, O., Turkyilmaz, O., Ozturk, A.R. et al. DolphinNext: a distributed data processing platform for high throughput genomics. BMC Genomics 21, 310 (2020). [<a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-6714-x">View</a>]
