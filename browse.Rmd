@@ -1,5 +1,5 @@
 ---
-title: ""
+title: ''
 ---
 
 <style>
@@ -10,14 +10,14 @@ table, th, td {
 body {
 text-align: justify}
 .main-container {
-  max-width: 1700px;
+  max-width: 1850px;
   margin-left: auto;
   margin-right: auto;
 }
 </style>
 
 <div align="center">
-  <iframe width='1700px' height='1000px' src='https://vitiligo-cellxgene.dolphinnext.com' >
+  <iframe width='1850px' height='1000px' frameBorder='0' src='https://vitiligo-cellxgene.dolphinnext.com'>
     <p>Your browser does not support iframes</p>
   </iframe>
 </div>
